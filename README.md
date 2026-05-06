@@ -1,159 +1,159 @@
-# Cross-Border PDP Conversion Strategy Skill
+# 跨境 PDP 转化策略 Skill
 
-A conversion-first strategy skill for cross-border ecommerce product detail pages (PDP) and hero-image planning.
+针对跨境电商产品详情页 (PDP) 和主图 (Hero Image) 规划的转化优先策略 Skill。
 
-This skill does **not** generate final images. It diagnoses what actually drives purchase behavior, then produces a structured visual brief + copy strategy that designers, marketers, or image models can execute.
+这个 Skill **不会** 生成最终图像。它诊断实际驱动购买行为的因素，然后生成结构化的视觉简报 + 文案策略，供设计师、营销人员或图像模型执行。
 
-## Why this exists
+## 为什么存在这个 Skill
 
-Most PDP and hero creative misses because teams start from layouts or aesthetics before deciding the persuasion job.
+大多数 PDP 和主图创意失败，是因为团队在确定说服逻辑之前，就先从布局或美学入手。
 
-This skill exists to:
-- identify the primary conversion mechanism for a product and audience,
-- map that mechanism into a clear hero/PDP narrative flow,
-- output executable copy and visual direction in English baseline first,
-- optionally localize without breaking conversion intent.
+这个 Skill 的存在是为了：
+- 识别产品和受众的主要转化机制，
+- 将该机制映射到清晰的主图/PDP 叙事流中，
+- 首先输出英文基准的可执行文案和视觉指导，
+- 可选地进行本地化，而不破坏转化意图。
 
-## What it does
+## 它的作用
 
-Given product and market context, the skill delivers:
-- conversion driver diagnosis,
-- 5-frame hero image plan,
-- PDP module structure,
-- concise copy lines (headline/subhead/proof/CTA),
-- offer + CTA architecture,
-- optional localization notes,
-- assumptions and test priorities.
+根据产品和市场背景，该 Skill 提供：
+- 转化驱动力诊断，
+- 5 帧主图规划，
+- PDP 模块结构，
+- 精炼的文案（标题/副标题/证明/CTA），
+- 优惠 + CTA 架构，
+- 可选的本地化备注，
+- 假设和测试优先级。
 
-Think of it as a **conversion strategy engine** for PDP/hero assets—not an automated image renderer.
+将其视为 PDP/主图资产的 **转化策略引擎** —— 而不是自动化图像渲染器。
 
-## The 3 conversion drivers
+## 3 大转化驱动力
 
-### 1) Visual-Driven (Sell with seeing)
-Use when decisions depend on look, style fit, finish, texture, or visible transformation.
+### 1) 视觉驱动型 (见即所得)
+当决策取决于外观、风格匹配、光洁度、质感或可见的转变时使用。
 
-Focus:
-- visual hierarchy and fast comprehension,
-- close-up proof of quality/details,
-- scenario fit and aesthetic payoff.
+重点：
+- 视觉层级和快速理解，
+- 质量/细节的近距离证明，
+- 场景匹配和美学回报。
 
-### 2) Pain-Driven (Sell with urgency + relief)
-Use when buyers face recurring frustration, risk, inefficiency, or loss.
+### 2) 痛点驱动型 (紧迫感 + 缓解)
+当买家面临反复的挫折、风险、低效或损失时使用。
 
-Focus:
-- clear pain/consequence framing,
-- mechanism of resolution,
-- trust proof,
-- decisive offer + CTA.
+重点：
+- 清晰的痛点/后果框架，
+- 解决机制，
+- 信任证明，
+- 果断的优惠 + CTA。
 
-### 3) Emotion-Value-Driven (Sell with identity/aspiration)
-Use when buying is tied to confidence, belonging, status, care, or self-expression.
+### 3) 情感/价值驱动型 (身份/抱负)
+当购买与信心、归属感、地位、关怀或自我表达挂钩时使用。
 
-Focus:
-- emotional hook,
-- identity/value narrative,
-- social validation and low-friction action.
+重点：
+- 情感钩子，
+- 身份/价值叙事，
+- 社交验证和低摩擦行动。
 
-## Workflow
+## 工作流程
 
-1. Collect minimum required inputs.
-2. Diagnose one primary conversion driver (optional secondary).
-3. Build conversion hypothesis and evidence plan.
-4. Produce English (US) baseline strategy + copy.
-5. Apply optional localization layer (intent-preserving adaptation).
-6. Run conversion QA before finalizing.
+1. 收集最低要求的输入。
+2. 诊断一个主要转化驱动力（可选次要）。
+3. 构建转化假设和证据计划。
+4. 生成英文 (US) 基准策略 + 文案。
+5. 应用可选的本地化层（保持意图的适配）。
+6. 在定稿前进行转化 QA。
 
-## Localization layer (optional)
+## 本地化层 (可选)
 
-Localization is an adaptation layer, not a rewrite of strategy.
+本地化是一个适配层，而不是策略的重写。
 
-Principles:
-- lock persuasion intent in English baseline first,
-- adapt wording, units, and context by market,
-- preserve hook/belief-shift/action cue,
-- avoid literal translation if it weakens conversion.
+原则：
+- 首先在英文基准中锁定说服意图，
+- 根据市场调整措辞、单位和背景，
+- 保留钩子/信念转变/行动提示，
+- 避免如果会削弱转化的字面翻译。
 
-## Example input
-
-```text
-Product: Self-heating eye mask
-Category: Sleep & wellness
-Price band: USD 19–29
-Audience: Stressed office workers (US + DE markets)
-Differentiators: 40-minute heat duration, unscented option, skin-safe material
-Proof assets: 4.7★ reviews, dermatology-tested report, 30-day guarantee
-Channel: Amazon PDP + main image stack
-Current weak points: decent clicks, low add-to-cart
-Goal: improve CVR and trust perception
-Localization needed: German
-```
-
-## Example output shape
+## 输入示例
 
 ```text
-1) Conversion Driver Diagnosis
-   - Primary: Pain-Driven
-   - Why: high recurring discomfort + clear relief mechanism
-
-2) Hero Image Plan (5 Frames)
-   - Frame 1: problem snapshot
-   - Frame 2: mechanism and relief
-   - Frame 3: benefit proof
-   - Frame 4: trust signals
-   - Frame 5: offer + CTA
-
-3) PDP Structure
-   - Problem severity → failed alternatives → solution mechanism
-   - Benefit stack → trust stack → offer architecture → CTA close
-
-4) Core Copy Lines (English baseline)
-   - Headline / subhead / proof bullets / CTA options
-
-5) Offer + CTA Architecture
-   - Bundle logic, risk reversal, urgency style
-
-6) Localization Notes
-   - DE adaptation guidance preserving persuasion intent
-
-7) Assumptions + Test Priorities
-   - Key unknowns and A/B test sequence
+产品：自发热眼罩
+类别：睡眠与健康
+价格区间：19–29 美元
+受众：压力大的上班族（美国 + 德国市场）
+差异化点：40 分钟持续发热，无香可选，皮肤安全材料
+证明资产：4.7★ 评价，皮肤科测试报告，30 天保障
+渠道：亚马逊 PDP + 主图堆栈
+当前弱点：点击量尚可，加购率低
+目标：提高转化率 (CVR) 和信任感知
+需要的本地化：德语
 ```
 
-> Optional: You may also request an **execution image prompt** for a design or image model workflow. This is a production brief, not final image generation.
+## 输出形状示例
 
-## Installation / Usage
+```text
+1) 转化驱动力诊断
+   - 主要：痛点驱动
+   - 原因：高频反复的不适感 + 清晰的缓解机制
 
-### In OpenClaw / Codex
-1. Make sure this skill is installed and discoverable by your agent runtime.
-2. Trigger with requests like:
-   - “Build a conversion strategy for my Amazon PDP hero images.”
-   - “Diagnose whether this product should be visual-driven or pain-driven.”
-   - “Create English baseline and then localize for Japan.”
+2) 主图规划 (5 帧)
+   - 第 1 帧：问题快照
+   - 第 2 帧：机制与缓解
+   - 第 3 帧：利益证明
+   - 第 4 帧：信任信号
+   - 第 5 帧：优惠 + CTA
 
-### Recommended prompt pattern
-Provide:
-- product/category/price band,
-- audience and purchase context,
-- differentiators + proof assets,
-- channel constraints,
-- current funnel weak points,
-- localization target (if needed).
+3) PDP 结构
+   - 问题严重性 → 失败的替代方案 → 解决方案机制
+   - 利益堆栈 → 信任堆栈 → 优惠架构 → CTA 结束
 
-## Limitations
+4) 核心文案 (英文基准)
+   - 标题 / 副标题 / 证明要点 / CTA 选项
 
-- Does not produce final design files or finished images.
-- Output quality depends on input quality (proof assets and clear audience matter).
-- Provides strategic copy/brief direction, not guaranteed performance.
-- Localization guidance is persuasion-focused; legal/compliance review is still required per market.
+5) 优惠 + CTA 架构
+   - 组合逻辑，风险逆转，紧迫感风格
 
-## Recommended next steps
+6) 本地化备注
+   - 保持说服意图的德语适配指导
 
-After receiving the strategy output:
-1. Hand off hero-frame brief to design team or image model workflow.
-2. Build 2–3 variant creatives based on primary/secondary hooks.
-3. Run structured A/B tests (CTR, add-to-cart, CVR, AOV).
-4. Feed performance back into the next strategy iteration.
+7) 假设 + 测试优先级
+   - 关键未知数和 A/B 测试序列
+```
+
+> 可选：您还可以为设计或图像模型工作流请求 **执行图像提示词 (Prompt)**。这是一个生产简报，而不是最终的图像生成。
+
+## 安装 / 使用
+
+### 在 OpenClaw / Codex 中
+1. 确保此 Skill 已安装并可被您的 Agent 运行时发现。
+2. 使用如下请求触发：
+   - “为我的亚马逊 PDP 主图构建转化策略。”
+   - “诊断该产品应该是视觉驱动还是痛点驱动。”
+   - “创建英文基准，然后为日本进行本地化。”
+
+### 推荐的 Prompt 模式
+提供：
+- 产品/类别/价格区间，
+- 受众和购买背景，
+- 差异化点 + 证明资产，
+- 渠道约束，
+- 当前漏斗弱点，
+- 本地化目标（如果需要）。
+
+## 局限性
+
+- 不生成最终的设计文件或完成的图像。
+- 输出质量取决于输入质量（证明资产和清晰的受众至关重要）。
+- 提供战略性的文案/简报方向，不保证性能。
+- 本地化指导侧重于说服力；每个市场仍需进行法律/合规审查。
+
+## 推荐的后续步骤
+
+在接收到策略输出后：
+1. 将主图简报移交给设计团队或图像模型工作流。
+2. 根据主要/次要钩子构建 2–3 个创意变体。
+3. 运行结构化的 A/B 测试（点击率、加购率、转化率、平均订单价值）。
+4. 将表现反馈到下一次策略迭代中。
 
 ---
 
-If your goal is “better-looking images only,” this skill may be overkill. If your goal is **higher conversion with clearer persuasion logic**, this is exactly what it is for.
+如果您的目标仅是“更好看的图片”，这个 Skill 可能大材小用。如果您的目标是**通过更清晰的说服逻辑获得更高的转化**，那么这正是它的用武之地。
