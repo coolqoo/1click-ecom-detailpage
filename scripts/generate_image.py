@@ -32,6 +32,13 @@ ENV_ALIASES = {
     ENV_MODEL: ("OPENAI_IMAGE_MODEL", "IMAGE_MODEL", "OPENAI_MODEL"),
     ENV_API_KEY: ("OPENAI_API_KEY", "API_KEY"),
 }
+REFERENCE_IMAGE_MIME_TYPES = {
+    "png": "image/png",
+    "jpg": "image/jpeg",
+    "jpeg": "image/jpeg",
+    "webp": "image/webp",
+}
+MAX_DATA_URL_LENGTH = 20_971_520
 
 
 def fail(message: str, exit_code: int = 1) -> None:
@@ -108,6 +115,28 @@ def require_config(name: str) -> str:
     return value
 
 
+def encode_reference_image(image_path: str) -> str:
+    path = Path(image_path)
+    if not path.is_file():
+        fail(f"参考图片不存在：{image_path}")
+
+    suffix = path.suffix.lower().lstrip(".")
+    mime = REFERENCE_IMAGE_MIME_TYPES.get(suffix)
+    if not mime:
+        supported = "/".join(REFERENCE_IMAGE_MIME_TYPES)
+        fail(f"不支持的参考图片格式：.{suffix}，仅支持 {supported}。")
+
+    try:
+        image_bytes = path.read_bytes()
+    except OSError as exc:
+        fail(f"无法读取参考图片：{exc}")
+
+    data_url = f"data:{mime};base64,{base64.b64encode(image_bytes).decode('ascii')}"
+    if len(data_url) > MAX_DATA_URL_LENGTH:
+        fail("参考图片编码后超过接口 JSON image_url 长度限制，请压缩图片后重试。")
+    return data_url
+
+
 def build_payload(args: argparse.Namespace, prompt: str, model: str) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "model": model,
@@ -120,7 +149,16 @@ def build_payload(args: argparse.Namespace, prompt: str, model: str) -> dict[str
     if args.format:
         # OpenAI 兼容服务通常使用 output_format 控制返回图片格式。
         payload["output_format"] = args.format
+    if args.image:
+        # JSON 图片编辑接口使用 images 数组；本地图片转为 data URL 作为参考图。
+        payload["images"] = [{"image_url": encode_reference_image(args.image)}]
     return payload
+
+
+def image_endpoint(base_url: str, args: argparse.Namespace) -> str:
+    if args.image:
+        return f"{base_url}/images/edits"
+    return f"{base_url}/images/generations"
 
 
 def post_json(url: str, api_key: str, payload: dict[str, Any]) -> dict[str, Any]:
@@ -262,6 +300,10 @@ def parse_args() -> argparse.Namespace:
         default=1,
         help="生成图片数量，默认 1。",
     )
+    parser.add_argument(
+        "--image",
+        help="参考产品图片路径；传入后改用图片编辑接口生成更一致的商品图。",
+    )
     args = parser.parse_args()
     if args.n < 1:
         fail("--n 必须大于等于 1。")
@@ -278,7 +320,7 @@ def main() -> None:
     api_key = require_config(ENV_API_KEY)
 
     payload = build_payload(args, prompt, model)
-    endpoint = f"{base_url}/images/generations"
+    endpoint = image_endpoint(base_url, args)
     result = post_json(endpoint, api_key, payload)
     paths = save_images(result, Path(args.output_dir), args.format)
 

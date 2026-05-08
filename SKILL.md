@@ -1,22 +1,340 @@
 ---
-name: visual-creator
-description: Create visual concepts, image-generation prompts, and optional AI-generated images for product hero images, marketing creatives, social posts, ads, ecommerce PDP visuals, and general visual design tasks. Use when the user asks for visual strategy, image prompt writing, product/marketing image direction, or direct text-to-image generation with their own OpenAI-compatible API.
+name: crossborder-pdp-conversion-strategy
+description: Build high-converting cross-border ecommerce PDP, hero image, product image stack, and AI image prompt strategy by diagnosing the conversion driver first, producing an English (US) baseline, optionally localizing without losing intent, then generating executable image prompts or images through the bundled OpenAI-compatible image script.
 ---
 
-# Visual Creator Skill
+# Cross-Border PDP Conversion Strategy Skill
 
-当用户需要视觉策略、图片 Prompt、商品主图、营销图、社媒图、广告图、电商 PDP 视觉，或要求直接 AI 生图时，使用这个 Skill。
+当用户需要跨境电商商品主图、PDP 详情页、Amazon / Shopify / TikTok Shop 图片、A+ content、广告图、商品图文案、转化优化、英文基准文案、本地化适配，或直接 AI 生图时，使用这个 Skill。
 
-这个 Skill 有两种模式：
+这个 Skill 的核心不是“先做漂亮图”，而是先判断什么真正驱动购买，再把转化逻辑变成可执行的图文案和生图 Prompt。
 
-1. **Brief / Prompt 模式**：只输出视觉简报和可执行图片 Prompt。
-2. **Generate 模式**：当用户明确要求“生图、生成图片、出图、render image”时，先输出最终 Prompt，再调用 `scripts/generate_image.py`。
+## Trigger Signals
 
-不要暴露、索要、写入、提交或回显真实 API key。使用者必须通过自己的环境变量配置 API。
+- "Amazon listing", "Shopify PDP", "TikTok Shop", "A+ content", "product image stack"
+- "hero image copy", "detail page", "PDP structure", "main image", "lifestyle image"
+- "improve CTR", "improve CVR", "boost add-to-cart", "increase AOV", "weak trust"
+- "offer + CTA", "bundle strategy", "guarantee", "risk reversal"
+- "localize copy", "multilingual listing", "adapt for US / EU / JP / DE market"
+- "生图", "生成商品图", "生成详情页图片", "出图"
+
+普通视觉任务可以处理，但跨境电商 PDP / 商品图 / 转化视觉优先级最高。
 
 ---
 
-## 生图配置
+## Core Principle
+
+不要从固定模板开始。先做 **Conversion Driver Diagnosis**：
+
+1. **Visual-Driven**：靠“看见”成交，适合外观、质感、礼品感、前后对比明显的产品。
+2. **Pain-Driven**：靠“问题紧迫 + 解决方案”成交，适合反复烦恼、风险、低效、损失明确的产品。
+3. **Emotion-Value-Driven**：靠“身份、向往、情绪价值”成交，适合自我表达、关怀、冲动、新奇和社交属性强的产品。
+
+所有主图、PDP 模块、图内文案和 Prompt 都必须服务所选转化驱动力。Every block must serve conversion. Remove decorative sections.
+
+---
+
+## Workflow
+
+1. 收集最小输入；缺关键字段时标注假设，不要编造。
+2. 诊断 1 个主转化驱动力，必要时补 1 个次级驱动力。
+3. 生成 **Buyer Reason Card**，锁定买家为什么现在会买。
+4. 输出 **English (US) Baseline**：先写英文基准策略和图文案。
+5. 如用户要求本地化，再做 **Localization Layer**，保留说服意图而不是字面翻译。
+6. 为多图任务建立 **Campaign Style Lock**，统一风格、色板、光线、布局和产品呈现。
+7. 如果是真实实物产品且用户提供了参考图，先执行 **Product Angle Sheet Pipeline**，禁止直接生成整套 5+8。
+8. 通过 **Image Copy Gate**：每张图先确定图内短文案，再写独立 Prompt。
+9. 输出主图序列、PDP 详情页序列、可执行 Prompt；如果明确要求生图，再调用 `scripts/generate_image.py`。
+10. 用 **Self-review Scorecard** 自审，不达标先重写。
+
+---
+
+## Minimum Inputs
+
+跨境电商任务优先收集：
+
+- Product name + category + price band
+- Audience segment + purchase context
+- Target market and channel constraints: Amazon, Shopify, TikTok Shop, Walmart, Etsy, etc.
+- Top differentiators: material, function, design, speed, cost, bundle, guarantee
+- Proof assets: test data, certifications, review themes, user feedback, press, warranty terms
+- Current weak points: low CTR, low CVR, low add-to-cart, weak trust, low AOV, high return concern
+- Offer assets: discount, bundle, free shipping, guarantee, urgency, bonus
+- Localization target, if needed
+- Output need: strategy only, Prompt only, full image pack, or direct image generation
+
+如果信息缺失：
+
+- 关键字段缺失但仍可推进时，用 `Assumption:` 明确写出。
+- 不要虚构测试数据、认证、销量、评分、真实评价或品牌授权。
+- 除非用户主动要求“合规检查 / 平台合规 / 风险审查”，不要输出独立合规模块。
+
+---
+
+## Buyer Reason Card
+
+商品 / PDP / 广告图任务必须先输出 Buyer Reason Card：
+
+1. **Target Buyer**：谁在买，处于什么使用场景。
+2. **Purchase Trigger**：为什么现在会考虑买。
+3. **Core Belief Shift**：图片要让用户从什么旧认知转到什么新认知。
+4. **Primary Selling Reason**：最强购买理由，只选一个主理由。
+5. **Proof Material**：已有证据素材；没有证据就写 proof placeholder。
+6. **Offer Lever**：价格、组合、保障、物流、赠品或低风险承诺。
+7. **Do-Not-Say**：禁用表达，尤其是无证据数据、认证、销量、真实评价、品牌授权。
+
+这个卡片决定后续图文案，不要先写 Prompt 再倒推卖点。
+
+---
+
+## Conversion Driver Logic
+
+### A. Visual-Driven
+
+Use when purchase depends on visual appeal, style fit, finish, texture, before/after visibility, or giftability.
+
+重点：
+
+- Thumb-stop visual claim: style/value in 1 second
+- Texture, detail, scale, finish, craft cues
+- Lifestyle context: where / when / how it looks right
+- Short benefit anchors, not dense explanations
+
+### B. Pain-Driven
+
+Use when the buyer feels acute friction, risk, time loss, discomfort, or recurring annoyance.
+
+Mandatory sequence:
+
+1. **Pain mining / fear trigger**: Make the problem concrete and costly.
+2. **Benefit / solution**: Show the mechanism and relief outcome.
+3. **Trust**: Use evidence, proof assets, user reassurance, warranty, or proof placeholder.
+4. **Irresistible offer + CTA**: Make action easy and inaction less attractive.
+
+### C. Emotion-Value-Driven
+
+Use when the product is tied to identity, confidence, belonging, status, care, joy, novelty, or impulse.
+
+重点：
+
+- Emotional hook and identity narrative
+- Symbolic payoff + practical reassurance
+- Social cue, gifting cue, self-care cue, or aspiration cue
+- Low-friction CTA with emotional reinforcement
+
+---
+
+## English Baseline Always First
+
+跨境电商输出必须先给 **English (US) Baseline**，除非用户明确只要中文内部讨论稿。
+
+English baseline 包含：
+
+1. Conversion diagnosis summary
+2. Buyer Reason Card
+3. Hero image sequence
+4. PDP module map
+5. Core copy lines: headline, subhead, proof line, CTA, offer line
+6. Offer + CTA Architecture
+7. Assumptions + Test Priorities
+
+规则：
+
+- 不要用中文思维直译英文卖点。
+- 图内文案要短、强、可扫读，适合移动端和主图。
+- 保留 hook / belief shift / action cue。
+- 证明型文案必须来自用户给定素材；没有证据时用 proof placeholder。
+
+---
+
+## Localization Layer
+
+本地化是加在 English baseline 后面的适配层，不是重写策略。
+
+Process:
+
+1. Lock conversion intent in English baseline.
+2. Adapt by market while preserving the same persuasion job.
+3. Validate length, cultural sensitivity, unit / scene / currency relevance.
+
+Rules:
+
+- Do not literal-translate high-performing lines.
+- Preserve conversion intent: hook, belief shift, action cue.
+- Respect platform length constraints for images and mobile PDP.
+- Adapt units: oz / ml, in / cm, temperature, currency format.
+- Replace culturally weak or risky references.
+- If localization weakens conversion intent, flag and revise.
+
+---
+
+## Image Copy Gate
+
+每张图必须先过图文案门，再写 Prompt。
+
+每张图先定义：
+
+- Frame objective: 这一张图负责推动什么转化动作。
+- On-image headline: 3-7 English words preferred.
+- Support labels: 2-4 short labels; no dense body text.
+- Proof / offer line: only if useful and evidence-backed or clearly placeholder.
+- CTA style: direct CTA, soft CTA, risk reversal, bundle CTA, or no CTA.
+
+图内文字规则：
+
+- 主图和详情页图片都要少字、大字、强层级。
+- 不要把长文案塞进图片。
+- 如果模型容易生成乱码，Prompt 中写：`clean layout with short readable headline placeholders, no dense body text`.
+
+---
+
+## Campaign Style Lock
+
+当生成主图 + 详情页、PDP 图片包、广告组图、社媒组图或任何多张图片时，在 English baseline 和图文案确定后建立 **Campaign Style Lock**。
+
+必填字段：
+
+1. Visual direction: premium tech ecommerce, clean household care, warm gift editorial, etc.
+2. Fixed palette: 2-3 main colors + 1 accent color.
+3. Temperature: warm, cool, or neutral.
+4. Font system: one consistent font style, usually modern geometric sans-serif.
+5. Background system: studio, tabletop, lifestyle room, outdoor, etc.
+6. Lighting system: direction, shadow, reflection, mood.
+7. Layout system: whitespace, labels, rounded rectangles, numbering, infographic components.
+8. Icon / illustration system: line width, color, complexity.
+9. Product presentation: angle, scale, placement, material behavior.
+10. Drift bans: no color palette changes, mixed fonts, random backgrounds, inconsistent lighting, mismatched icon styles.
+
+默认 Style Lock：
+
+```text
+Campaign Style Lock: consistent premium cross-border ecommerce visual system across the entire image set; fixed palette of clean off-white background, deep charcoal text, one product-matched accent color, and one soft secondary accent; neutral-cool studio lighting; modern geometric sans-serif headline placeholders only; consistent rounded rectangular info labels; consistent thin-line icon style; clean high-end product photography mixed with minimal infographic elements; stable product scale and placement; generous whitespace; no color palette changes, no mixed fonts, no random backgrounds, no inconsistent lighting, no mismatched icon styles.
+```
+
+多图 Prompt 强制规则：
+
+- 每张 Prompt 第一段必须复用同一段 Campaign Style Lock。
+- 单张图只能改变画面目的、主体动作、局部构图和短文案。
+- 不能改变色板、冷暖调、字体、背景、光线、图标和标签样式。
+- 重生某一张图时必须复用原 Style Lock。
+
+---
+
+## Hero Image Sequence
+
+### Visual-Driven
+
+1. Thumb-stop visual claim
+2. Key feature close-up
+3. Use scenario fit
+4. Ordinary vs upgraded comparison
+5. Offer + shipping / guarantee + CTA
+
+### Pain-Driven
+
+1. Problem snapshot
+2. Solution mechanism
+3. Benefit proof
+4. Trust frame
+5. Offer + urgency CTA
+
+### Emotion-Value-Driven
+
+1. Emotional scene hook
+2. Identity / value statement
+3. Product as enabler
+4. Belonging / status / social cue
+5. Offer + CTA with emotional reinforcement
+
+---
+
+## PDP Detail Image Sequence
+
+当用户提到 PDP、详情页、Amazon A+、Shopify product page、主图堆栈或整套商品图时，默认输出 **5 张主图 + 7-9 张详情页图片**。
+
+详情页图片默认 `1024x1536`，每张独立成屏，每张独立 Prompt。
+
+通用 PDP 详情页序列：
+
+1. Above-the-fold promise: who it helps and what problem / desire it solves.
+2. Pain or desire amplification: current inconvenience, risk, loss, or aspiration.
+3. Mechanism explanation: how the product works, shown visually.
+4. Benefit stack: 2-4 scan-friendly functional and practical benefits.
+5. Usage steps: 3-4 simple steps.
+6. Scenario coverage: where, when, who, before / after state.
+7. Comparison choice: ordinary option vs this product, based on observable differences.
+8. Trust stack: materials, packaging, warranty, review themes, proof placeholder.
+9. FAQ / risk reversal / CTA: concerns, fit, bundle, guarantee, close.
+
+---
+
+## Product Angle Sheet Pipeline
+
+真实实物产品的整套商品图不能直接从文字或单张营销参考图生成正式 5+8。只要用户提供产品参考图，并要求主图堆栈、PDP 详情页、整套商品图或直接生图，必须先生成一张临时 **Product Angle Sheet**。
+
+Product Angle Sheet 目的：
+
+- 只锁定产品身份和外观，不承担销售转化。
+- 去除参考图里的促销角标、价格、评分、Bestseller 标签和营销排版。
+- 在一张临时图里呈现同一产品的多个可复用角度。
+
+Product Angle Sheet 必须包含：
+
+1. 正面产品图。
+2. 左 45 度产品图。
+3. 右 45 度产品图。
+4. 侧面厚度图。
+5. 背面或磁吸面图。
+6. 接口、按钮、LED 或关键结构细节。
+7. 产品 + 包装盒组合图，如果参考图里有包装。
+8. 产品吸附在手机背面的使用角度，如果品类需要。
+
+Angle Sheet Prompt 规则：
+
+- 可以详细描述产品形状、材质、颜色、logo、包装和角度。
+- 禁止加入促销角标、价格、折扣、评分、Bestseller、物流、CTA 或任何正式营销文案。
+- 背景使用干净浅色工作室风格；允许多角度排列，但不要做成最终 PDP 版式。
+
+Consistency Gate：
+
+- 如果 Product Angle Sheet 中产品形状、材质、品牌、包装、关键部件明显跑偏，禁止继续生成 5+8。
+- 先重生 Product Angle Sheet，直到产品身份稳定，再进入正式图包。
+
+正式图包引用规则：
+
+- 每张正式图都必须使用 Product Angle Sheet 作为参考图。
+- 正式图 Prompt 中关于 Product Angle Sheet 只允许使用这一句：
+
+```text
+Use the product angle sheet only as product identity reference.
+```
+
+- 不要在正式图 Prompt 里追加其它 angle sheet 说明句。
+
+---
+
+## Image Prompt Structure
+
+默认用英文写 Prompt，除非用户明确指定其他语言。
+
+Prompt 结构：
+
+1. Campaign Style Lock，多图任务必填。
+2. Product Angle Sheet reference line，实物产品正式图包必填且只能使用指定一句。
+3. Frame objective and conversion job.
+4. Product, buyer scenario, and scene.
+5. On-image copy placeholders: headline and short labels.
+6. Composition, camera, lens, crop, hierarchy.
+7. Lighting, color, material, texture.
+8. Realism level and ecommerce platform fit.
+9. Size / aspect ratio.
+10. Negative constraints: no dense text, no fake logos, no random backgrounds, no clutter.
+
+Prompt 要具体到可执行，但不要过度规定无关细节。
+
+---
+
+## Direct Image Generation
 
 直接生图使用 OpenAI 兼容 Images API。优先在项目根目录放 `.env`，不要把真实 API key 写进仓库：
 
@@ -26,290 +344,68 @@ IMG_MODEL=gpt-image-1.5
 IMG_API_KEY=your-api-key
 ```
 
-脚本也兼容常见别名：`OPENAI_BASE_URL`、`OPENAI_API_BASE`、`OPENAI_IMAGE_MODEL`、`OPENAI_MODEL`、`OPENAI_API_KEY`。
+脚本也兼容：`OPENAI_BASE_URL`、`OPENAI_API_BASE`、`OPENAI_IMAGE_MODEL`、`OPENAI_MODEL`、`OPENAI_API_KEY`。
 
-生图脚本：
+命令示例：
 
 ```bash
 python3 scripts/generate_image.py --prompt "clean product hero image..." --size 1024x1024
-python3 scripts/generate_image.py --prompt-file prompt.txt --output-dir outputs
+python3 scripts/generate_image.py --prompt-file prompt.txt --output-dir generated-images
+python3 scripts/generate_image.py --prompt-file prompt.txt --image product.png --output-dir generated-images
 python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt
 ```
 
-如果缺少任何生图配置，说明需要在 `.env` 里配置什么，并把最终 Prompt 交给用户，方便用户稍后自行运行。
+规则：
+
+- 短 Prompt 用 `--prompt`，长 Prompt 用 `--prompt-file`。
+- 有产品参考图时用 `--image product.png`；脚本会改用 `/images/edits` 并把本地图片作为参考图传入。
+- 主图默认 `1024x1024`；详情页默认 `1024x1536`，如模型不支持则选最接近尺寸并说明。
+- 缺少 `.env` 或 `IMG_*` 配置时，只输出 Prompt 和配置说明，不调用脚本。
+- 不要暴露、索要、写入、提交或回显真实 API key。
 
 ---
 
-## 核心流程
+## Self-review Scorecard
 
-1. 判断视觉任务类型。
-2. 只收集会实质影响图片结果的缺失信息。
-3. 构建视觉简报。
-4. 如果任务包含多张图，先建立 **Campaign Style Lock**，锁定整套图的色板、冷暖调、字体、背景、光线、布局和图标风格。
-5. 写出可执行图片 Prompt；多图任务必须把同一段 Campaign Style Lock 原样放进每张 Prompt。
-6. 如果任务是商品图、详情页图或营销图，先做转化驱动力诊断。
-7. 如果用户要求电商详情页、PDP、主图堆栈或整套商品图，默认输出 **5 张主图 + 7-9 张详情页图片** 的图片包。
-8. 如果用户要求直接出图，调用 `scripts/generate_image.py`。
-9. 返回 Prompt、生成文件路径和关键假设。
+最终输出前自审：
 
----
+- Conversion clarity: 用户 1 秒内是否知道为什么该看下去。
+- Buyer reason fit: 是否服务 Buyer Reason Card 的主购买理由。
+- English baseline quality: 是否像跨境商品文案，而不是中文直译。
+- Mobile readability: 图内文字是否短、清楚、层级强。
+- Visual consistency: 多图是否复用同一 Style Lock。
+- Platform fit: 是否适配 Amazon / Shopify / TikTok Shop 等渠道语境。
+- Evidence honesty: 是否避免虚构数据、认证、评分、真实评价和品牌授权。
 
-## 最小输入
-
-任何视觉任务都优先确认这些信息：
-
-- 目标：图片要达成什么效果。
-- 用途：商品主图、广告图、社媒图、Banner、PDP 模块、缩略图、概念图等。
-- 主体：产品、人物、场景、物体或抽象概念。
-- 受众和使用语境。
-- 风格：真实摄影、编辑部风格、高级棚拍、UGC、3D 渲染、插画等。
-- 构图、比例、平台尺寸。
-- 是否需要图片内文字。
-- 负面约束：避免 logo、避免文字、避免杂乱、避免医疗承诺等。
-
-如果缺少非关键字段，明确假设后继续，不要无谓阻塞。
+除非用户主动要求合规检查，不输出正式 Compliance Review；只在明显会虚构或误导时做最小提醒并改写。
 
 ---
 
-## 通用图片 Prompt 结构
+## Output Format
 
-默认用英文写 Prompt，除非用户要求其他语言。
-
-Prompt 按这个结构组织：
-
-1. Campaign Style Lock，多图任务必填且每张图完全一致。
-2. 主体和场景。
-3. 图片目的和情绪意图。
-4. 构图、镜头和取景。
-5. 光线、颜色、材质和纹理。
-6. 风格和真实感等级。
-7. 平台限制和画幅比例。
-8. 图片内文字处理。
-9. 负面约束。
-
-Prompt 要足够具体，可以直接执行；也不要过度规定无关细节，避免和用户目标冲突。
-
----
-
-## 整套图片风格一致性规则
-
-当生成主图 + 详情页、PDP 图片包、广告组图、社媒组图或任何多张图片时，必须先定义一个 **Campaign Style Lock**。这是整套图的视觉合同，不是灵感描述。
-
-### Campaign Style Lock 必填字段
-
-1. **视觉方向**：例如 premium tech ecommerce、clean household care、warm gift editorial。
-2. **固定色板**：限制为 2-3 个主色 + 1 个强调色；写清楚背景色、文字色、强调色，不要每张图重新配色。
-3. **冷暖调**：明确 warm / cool / neutral，并要求全套一致。
-4. **字体系统**：统一为一种字体风格，例如 modern geometric sans-serif；禁止混用衬线、手写、复古、卡通字体。
-5. **背景系统**：统一背景材质、空间和深浅，例如 clean light gray studio background 或 deep navy premium tech background。
-6. **光线系统**：统一光源方向、阴影强度、反光质感和氛围。
-7. **布局系统**：统一留白、圆角、分栏、标签、编号和信息图组件风格。
-8. **图标 / 插画系统**：如果用图标，统一线宽、形状、颜色和复杂度。
-9. **产品呈现规则**：产品角度、大小比例、材质表现和是否居中必须稳定。
-10. **禁止漂移项**：明确禁止 changing color palette, mixed fonts, inconsistent lighting, random backgrounds, mismatched icon styles。
-
-### 默认 Style Lock 模板
-
-如果用户没有给品牌规范，使用保守统一的电商视觉系统：
-
-```text
-Campaign Style Lock: consistent premium ecommerce visual system across the entire image set; fixed palette of clean off-white background, deep charcoal text, one product-matched accent color, and one soft secondary accent; neutral-cool studio lighting; modern geometric sans-serif headline placeholders only; consistent rounded rectangular info labels; consistent thin-line icon style; clean high-end product photography mixed with minimal infographic elements; stable product scale and placement; generous whitespace; no color palette changes, no mixed fonts, no random backgrounds, no inconsistent lighting, no mismatched icon styles.
-```
-
-### 多图 Prompt 强制规则
-
-- 每张图 Prompt 的第一段必须是同一段 Campaign Style Lock，不能改写、缩短或换同义词。
-- 单张图只能改变：画面目的、主体动作、局部构图和短文案。
-- 单张图不能改变：色板、冷暖调、字体风格、背景系统、光线系统、图标风格和信息标签样式。
-- 如果用户要求重生其中一张图，必须复用原来的 Campaign Style Lock。
-- 如果已生成图片风格不一致，优先重写 Prompt 包，而不是逐张随意补描述。
-
----
-
-## 商品和营销转化流程
-
-商品主图、电商图片、广告图和 PDP 视觉不要从固定模板开始，要先判断转化驱动力。
-
-选择一个主要驱动力：
-
-### A. 视觉驱动型
-
-适用于购买决策依赖外观、风格匹配、光洁度、质感、前后对比或礼品属性的产品。
-
-重点：
-
-- 一眼抓住产品吸引力。
-- 质感、细节、工艺和质量信号。
-- 使用场景和视觉层级。
-- 简短利益点。
-
-### B. 痛点驱动型
-
-适用于买家有明确摩擦、风险、时间损失、不适或反复烦恼的产品。
-
-强制顺序：
-
-1. 痛点挖掘 / 风险触发。
-2. 利益 / 解决方案。
-3. 信任和证明。
-4. 优惠 + CTA。
-
-重点是具体问题、缓解机制、证据和风险逆转。
-
-### C. 情感价值驱动型
-
-适用于购买和身份、信心、归属、地位、关怀、快乐、新奇或冲动相关的产品。
-
-重点：
-
-- 情绪钩子。
-- 身份或向往。
-- 产品作为实现方式。
-- 社交证明和低摩擦行动。
-
----
-
-## 商品图序列模板
-
-当用户提到“详情页、PDP、Amazon A+、Shopify 商品页、主图堆栈、整套商品图、商品详情图片”时，不要只停留在 5 张主图。必须追加详情页图片序列，并把每一屏都写成可单独生图的 Prompt。
-
-### 视觉驱动主图序列
-
-1. 一眼可懂的视觉主张。
-2. 核心功能或质感特写。
-3. 使用场景匹配。
-4. 普通方案 vs 升级方案对比。
-5. 优惠、物流、保障或 CTA 画面。
-
-### 痛点驱动主图序列
-
-1. 问题快照。
-2. 解决机制。
-3. 利益证明。
-4. 信任画面。
-5. 优惠 + 紧迫 CTA。
-
-### 情感价值主图序列
-
-1. 情绪场景钩子。
-2. 身份 / 价值表达。
-3. 产品作为实现方式。
-4. 归属、地位或社交信号。
-5. 带情绪强化的优惠 + CTA。
-
----
-
-## 详情页图片序列模板
-
-详情页图片用于移动端纵向浏览，默认每张图独立成屏，尺寸优先使用 `1024x1536` 或平台指定竖版比例。除非用户明确只要文案，否则每个模块都要输出对应图片 Prompt。
-
-### 通用 PDP 详情页图片序列
-
-1. 首屏承接：延续主图卖点，说明产品为谁解决什么问题。
-2. 痛点放大：展示用户当前的不便、损失、风险或反复烦恼。
-3. 机制解释：用视觉化结构说明产品如何发挥作用，避免虚构无法证明的数据。
-4. 核心利益：把 2-4 个主要利益做成易扫读的信息图。
-5. 使用步骤：用 3-4 步说明怎么用，降低理解成本。
-6. 场景覆盖：展示典型使用场景、适用对象或使用前后状态。
-7. 对比选择：普通方案 vs 本产品，突出可观察差异和体验差异。
-8. 信任背书：展示材料、包装、质检、保障、真实评价等已有证据；没有证据就写“proof placeholder”，不要编造认证。
-9. FAQ / 风险逆转 / CTA：处理残留、适用范围、售后、组合优惠等临门疑虑。
-
-### 驱动力适配
-
-- 视觉驱动型：增加质感细节、尺寸比例、使用场景和礼品感。
-- 痛点驱动型：严格按“问题严重性 → 解决机制 → 利益证明 → 信任 → CTA”推进。
-- 情感价值驱动型：增加生活方式、身份表达、社交场景和情绪回报。
-
-### 图片内文字规则
-
-- 详情页图片可以有短文案，但必须短、清楚、适合移动端。
-- 每屏主标题建议 3-7 个英文词或 6-12 个中文字。
-- 说明性文字用 2-4 个短标签，不要生成大段小字。
-- 如果模型容易生成乱码，Prompt 中明确要求 “clean layout with short readable headline placeholders, no dense body text”。
-
----
-
-## 多图生成执行规则
-
-当用户要求直接生成整套电商图片：
-
-1. 先建立 Campaign Style Lock，并写入图片包计划。
-2. 再为每张图建立编号、用途、画幅、图片内短文案和独立 Prompt。
-3. 主图默认 `1024x1024`；详情页图片默认 `1024x1536`。
-4. 每张图使用独立 Prompt 文件，避免一次 Prompt 生成多屏拼图。
-5. 每张独立 Prompt 必须以同一段 Campaign Style Lock 开头。
-6. 输出目录用产品英文 slug，例如 `generated-images/laundry-detergent-pods-pdp/`。
-7. 如果 API 或模型不支持某个尺寸，改用最接近的支持尺寸，并在结果中说明。
-8. 如果缺少 `.env` 或生图配置，只输出完整 Prompt 包，不调用脚本。
-9. 不要虚构认证、实验数据、评分、销量、真实评价或品牌授权。
-
----
-
-## 直接生图规则
-
-当用户要求生成图片：
-
-1. 先输出最终 Prompt。
-2. 短 Prompt 用 `--prompt`，长 Prompt 用 `--prompt-file`。
-3. 根据平台选择 `--size`，没有要求时默认 `1024x1024`。
-4. 只有用户指定目录时才使用 `--output-dir`，否则使用 `generated-images/`。
-5. 如果缺少 `IMG_API_KEY` 等配置，不要调用脚本；返回 Prompt 和配置命令示例。
-
-命令形状：
-
-```bash
-python3 scripts/generate_image.py --prompt "..." --size 1024x1024
-```
-
-脚本支持：
-
-- `--prompt`
-- `--prompt-file`
-- `--output-dir`
-- `--size`
-- `--quality`
-- `--format`
-- `--n`
-
----
-
-## QA 检查
-
-最终输出前确认：
-
-- Prompt 符合用户真实目标。
-- 主体、构图、风格和用途明确。
-- 商品 / 营销任务包含转化驱动力诊断。
-- 证据缺失时不虚构效果、认证或数据。
-- 图片内文字短且必要。
-- 负面约束覆盖常见失败点。
-- 输出和文件里没有 API key 或私密凭据。
-
----
-
-## 输出格式
-
-Brief / Prompt 模式返回：
-
-1. **Visual Brief**
-2. **Final Image Prompt**
-3. **Negative Constraints**
-4. **Assumptions**
-
-商品或营销任务追加：
+策略 / Prompt 模式：
 
 1. **Conversion Driver Diagnosis**
-2. **Campaign Style Lock**，当任务包含多张图片
-3. **Hero Image Sequence**
-4. **PDP Detail Image Sequence**，当请求涉及详情页、PDP 或整套商品图
-5. **Copy Lines**，如果图片需要文字
-6. **Test Priorities**
+2. **Buyer Reason Card**
+3. **English Baseline**
+4. **Localization Notes**，仅在用户要求本地化时输出
+5. **Offer + CTA Architecture**
+6. **Campaign Style Lock**，多图任务必填
+7. **Hero Image Sequence**
+8. **PDP Detail Image Sequence**，PDP / 详情页 / 整套商品图任务必填
+9. **Image Prompts**
+10. **Assumptions + Test Priorities**
+11. **Self-review Scorecard**
 
-Generate 模式返回：
+Generate 模式：
 
-1. **Final Image Prompt**
-2. **Campaign Style Lock**，多图任务必须返回
-3. **Image Pack Plan**，包含每张图的编号、用途、尺寸和短文案
-4. **Generated Files**
-5. **Assumptions / Notes**
+1. **Conversion Driver Diagnosis**
+2. **Buyer Reason Card**
+3. **English Baseline Copy**
+4. **Campaign Style Lock**
+5. **Image Pack Plan**
+6. **Final Image Prompts**
+7. **Generated Files**
+8. **Assumptions / Notes**
+
+输出要能被 marketer、designer、media buyer 和 image model 直接执行。
