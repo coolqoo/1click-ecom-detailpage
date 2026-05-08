@@ -1,236 +1,210 @@
-# Ecom PDP Skill
+<div align="center">
 
-> Turn raw product inputs into a conversion-first ecommerce PDP image system — strategy, English copy, image sequences, executable prompts, and optional direct image generation.
+# 🛍️ 1Click Ecom PDP Skill
 
-<p align="center">
-  <strong>Built for AI agents that ship product pages, not pretty moodboards.</strong>
-</p>
+**面向 AI Agent 的高级跨境电商 PDP 转化策略引擎**
 
-<p align="center">
-  <img alt="Skill" src="https://img.shields.io/badge/AI%20Skill-ecom--pdp-111827?style=for-the-badge">
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white">
-  <img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-stdlib%20only-10B981?style=for-the-badge">
-  <img alt="Images API" src="https://img.shields.io/badge/Images%20API-OpenAI--compatible-7C3AED?style=for-the-badge">
-</p>
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Tested On](https://img.shields.io/badge/Tested_on-OpenClaw_|_Hermes_|_Codex_|_Claude_Code-2ea44f?style=for-the-badge&logo=openai&logoColor=white)](#)
+[![AI Agent Ready](https://img.shields.io/badge/AI_Agent-Ready-8A2BE2?style=for-the-badge&logo=probot&logoColor=white)](#)
 
-<p align="center">
-  <img alt="Tested on OpenClaw" src="https://img.shields.io/badge/Tested%20on-OpenClaw-0F172A?style=flat-square">
-  <img alt="Tested on Hermes" src="https://img.shields.io/badge/Tested%20on-Hermes-0F172A?style=flat-square">
-  <img alt="Tested on Codex" src="https://img.shields.io/badge/Tested%20on-Codex-0F172A?style=flat-square">
-  <img alt="Tested on Claude Code" src="https://img.shields.io/badge/Tested%20on-Claude%20Code-0F172A?style=flat-square">
-</p>
+*深度洞察转化诱因 ｜ 端到端生成高转化图包与文案 ｜ 无缝对接主流 API*
+
+</div>
 
 ---
 
-## What This Is
+> **Ecom PDP Skill** 的核心理念是：**先判断商品为什么能卖**。
+> 
+> 它能够智能输出高转化的**英文基准文案**、**主图 / 详情页视觉结构**、**图内短文案**以及**可执行的 AI 生图 Prompt**。在配置 OpenAI 兼容的图片 API 后，更可直接为您生成完整的电商 PDP 图包，实现真正的端到端交付。
 
-**Ecom PDP Skill** is a cross-border ecommerce conversion skill for AI agents.
+## ✨ 核心特性
 
-It helps an agent decide **why a product should sell first**, then turns that diagnosis into:
-
-- English (US) baseline copy
-- buyer reason cards
-- Amazon / Shopify / TikTok Shop PDP image structures
-- hero image stacks
-- detail-page image sequences
-- short in-image copy
-- executable AI image prompts
-- optional direct image generation through an OpenAI-compatible Images API
-
-The core idea is simple:
-
-> Pretty images are not enough. Every image must have a job in the conversion path.
+- **🎯 深度转化诊断**：智能分析产品的核心购买驱动力（视觉驱动、痛点驱动或情绪价值驱动）。
+- **🌍 极致跨境本地化**：生成原汁原味的 English (US) 营销文案，完美适配 Amazon, Shopify, TikTok Shop 等多渠道。
+- **📸 端到端出图能力**：根据策略 Prompt 自动生成 5 张主图 + 7~9 张详情页连贯视觉图。
+- **🤖 广泛的框架兼容**：专为 Agent 打造，已在 OpenClaw, Hermes, Codex, Claude Code 等主流智能体框架上进行深度验证与测试。
 
 ---
 
-## Best For
+## 🚀 快速开始
 
-- Amazon listings
-- Shopify product detail pages
-- TikTok Shop product pages
-- Amazon A+ content
-- ecommerce hero image stacks
-- product ad creatives
-- offer / CTA image systems
-- PDP conversion audits
-- cross-border English copy and localization
-
-It can handle general visual prompts, but its strongest use case is **conversion-first ecommerce product imagery**.
-
----
-
-## Tested Agent Runtime
-
-This skill is designed to be portable across modern AI coding / agent environments.
-
-| Runtime | Status | Notes |
-|---|---:|---|
-| OpenClaw | ✅ Tested | Native skill-style workflow |
-| Hermes | ✅ Tested | Works as a local agent skill package |
-| Codex | ✅ Tested | Works under `~/.codex/skills` |
-| Claude Code | ✅ Tested | Works when the skill directory is readable |
-
-The bundled image script only uses the Python standard library, so the runtime mainly needs file access and Python 3.10+.
-
----
-
-## Install
-
-Ask your AI agent to install this skill:
+将以下指令发送给你的 AI Agent：
 
 ```text
-Please install this skill: https://github.com/coolqoo/1click-ecom-detailpage
+请安装这个 Skill：`https://github.com/coolqoo/1click-ecom-detailpage`
 ```
 
-If your agent uses a local skill directory such as `~/.codex/skills`, you can install it manually from the repository root:
+安装完成后，配置生图模型 API（参考下方 [🔑 API 配置](#-api-配置)），即可通过自然语言直接驱动。
+
+*(注意：若未配置 API，系统将仅输出可执行的生图 Prompt。)*
+
+**直接发给 Agent 的示例指令：**
+```text
+用 ecom-pdp 给这款产品做 Amazon US PDP 图包：
+输出 5 张主图 + 8 张详情页图。
+```
+
+---
+
+## 💻 部署与配置
+
+<details>
+<summary><b>点击展开手动安装指南</b></summary>
+
+**环境要求：**
+- AI Agent 具有本地 Skill 目录的读取权限。
+- Python 3.10+（生图脚本纯净且仅依赖标准库）。
+
+如果您的 Agent 运行在 `~/.codex/skills` 目录下，可从本仓库根目录手动安装：
 
 ```bash
 mkdir -p ~/.codex/skills/ecom-pdp
 rsync -a --exclude .git --exclude .env --exclude "generated-images/" ./ ~/.codex/skills/ecom-pdp/
 ```
 
-Verify the image helper:
-
+**验证安装：**
 ```bash
 python3 ~/.codex/skills/ecom-pdp/scripts/generate_image.py --help
 ```
 
----
+</details>
 
-## Quick Start
+### 🔑 API 配置 (解锁直接生图)
 
-After installation, talk to your agent naturally:
+为了开启图包的**一键生成**，请在项目根目录复制环境变量文件：
 
-```text
-Use ecom-pdp to build an Amazon US PDP image pack for this product.
-Output 5 hero images + 8 detail-page images.
-Start with prompts. If the local image API is configured, generate the images directly.
+```bash
+cp .env.example .env
 ```
 
-A stronger input looks like this:
+并在 `.env` 中填入兼容的服务凭证：
 
-```text
-Use ecom-pdp for a portable blender.
-Market: Amazon US.
-Audience: gym users and commuters.
-Key claims: 20-second blending, USB-C charging, leak-resistant design.
-Need: 5 main images + 8 PDP detail images.
-Output English copy, image sequence, and executable prompts.
+```dotenv
+IMG_BASE_URL=https://api.openai.com/v1
+IMG_MODEL=gpt-image-1.5
+IMG_API_KEY=your-api-key
 ```
 
----
-
-## How It Thinks
-
-The skill starts with **Conversion Driver Diagnosis**.
-
-It classifies the product into one primary selling logic:
-
-### 1. Visual-Driven
-
-For products that sell through appearance, texture, style, giftability, aesthetic upgrade, or obvious before/after contrast.
-
-Focus:
-
-- visual desire
-- premium feel
-- styling context
-- quick benefit scanning
-
-### 2. Pain-Driven
-
-For products that solve repeated frustration, risk, inefficiency, time loss, discomfort, or daily friction.
-
-Focus:
-
-- pain recognition
-- mechanism clarity
-- proof and trust
-- risk reversal
-- CTA momentum
-
-### 3. Emotion-Value-Driven
-
-For products that sell identity, self-care, novelty, belonging, social signal, or impulse desire.
-
-Focus:
-
-- emotional hook
-- identity bridge
-- social meaning
-- low-friction purchase motivation
-
-The output is then built around that conversion driver. Decorative sections get removed. Conversion blocks stay.
+> **安全提示**：请妥善保管您的密钥，切勿将 `.env` 提交至代码库中。脚本同时兼容 `OPENAI_API_KEY` 等常见环境变量。
 
 ---
 
-## Core Workflow
+## 💡 实战场景与用法
 
-1. Resolve the minimum product inputs.
-2. Diagnose the primary conversion driver.
-3. Build a Buyer Reason Card.
-4. Write the English (US) baseline.
-5. Define offer, trust, CTA, and risk-reversal logic.
-6. Create a Campaign Style Lock for visual consistency.
-7. Plan the hero image stack.
-8. Plan the PDP detail image sequence.
-9. Write short in-image copy first.
-10. Generate independent executable prompts for each image.
-11. Optionally call the bundled image script.
-12. Self-review the pack for conversion clarity.
+### 🤖 零代码自然语言调用
+在 AI Agent 中以对话形式发起任务：
 
----
+```text
+用 ecom-pdp 给这款便携榨汁杯做 Amazon US PDP 图包：
+目标人群是健身和通勤人群，卖点是 20 秒打碎、USB-C 充电、便携防漏。
+输出 5 张主图 + 8 张详情页图，先给 Prompt；如果本地 API 配置齐全就直接出图。
+```
 
-## Minimum Inputs
+### 🛠️ 进阶命令行调用
 
-The skill works best when you provide:
+<details>
+<summary><b>点击查看更多高级用法</b></summary>
 
-- product name and category
-- target market and language
-- sales channel: Amazon, Shopify, TikTok Shop, etc.
-- audience segment
-- price band
-- top differentiators
-- proof assets: certifications, test results, reviews, warranty, press, etc.
-- offer assets: discount, bundle, free shipping, guarantee, bonus
-- current funnel problem: CTR, CVR, add-to-cart, trust, AOV, return concern
-- output mode: strategy, prompts, image pack, or direct generation
+**仅输出 Prompt 策略文件：**
+```bash
+python3 scripts/generate_image.py \
+  --mode prompt \
+  --prompt "premium Amazon main image for a portable blender, clean white background, large product, concise benefit label" \
+  --job-dir generated-images/portable-blender-pack-20260509-120000 \
+  --asset-type main \
+  --size 1024x1024
+```
 
-If details are missing, the skill resolves information in this order:
+**从预设文件自动生成：**
+```bash
+python3 scripts/generate_image.py \
+  --prompt-file prompts/main-01.txt \
+  --job-dir generated-images/portable-blender-pack-20260509-120000 \
+  --asset-type main
+```
 
-1. user-provided input / attachments / context
-2. follow-up questions
-3. public web research
-4. logical inference
-5. explicit assumptions / defaults
+**基于产品参考图生成一致性资产（Product Angle Sheet）：**
+```bash
+python3 scripts/generate_image.py \
+  --prompt-file prompts/angle-sheet.txt \
+  --image product.png \
+  --job-dir generated-images/portable-blender-pack-20260509-120000 \
+  --asset-type angle-sheet
+```
 
-When assumptions are used, the final output should say so.
-
----
-
-## Output Shape
-
-Typical strategy / prompt output includes:
-
-1. Missing Info Questions, only when truly blocking
-2. Conversion Driver Diagnosis
-3. Buyer Reason Card
-4. English Baseline
-5. Localization Notes, if needed
-6. Offer + CTA Architecture
-7. Campaign Style Lock
-8. Hero Image Sequence
-9. PDP Detail Image Sequence
-10. Image Prompts
-11. Assumptions / Defaults Used
-12. Test Priorities
-13. Self-review Scorecard
-
-Generate mode additionally returns generated file paths.
+</details>
 
 ---
 
-## Example Output Skeleton
+## ⚙️ 核心引擎与工作流
+
+### 🔄 智能执行链路
+1. **多级上下文补齐**：自动按权重补全信息缺失（用户输入 > 附件上下文 > 自动联网研究 > 逻辑推理 > 默认假设）。
+2. **转化驱动洞察**：智能剖析当前商品属于 Visual-Driven, Pain-Driven 还是 Emotion-Value-Driven。
+3. **策略卡输出**：生成 `Buyer Reason Card`（购买理由卡），定调英文基准文案与核心 CTA。
+4. **视觉风格锁定**：建立全局 `Campaign Style Lock`，确保几十张套图风格严丝合缝。
+5. **按需直接交付**：用户明确指令且 API 就绪时，直接调用内部脚本渲染出完整资产图包。
+
+### 🛡️ 智能合规偏好 (Compliance Engine)
+系统默认**关闭**合规审查以保证创意自由度。若您要求“开启合规 / 风险审查”：
+- 将严格过滤功效承诺、医疗暗示、绝对化用语及不当比较。
+- 强制要求数据、认证、销量及用户真实评价来源合法且可验证。
+- 没有真实素材时，自动以功能解析 / FAQ / 场景代替评价区块。
+
+### 🧠 主动提问与容错机制
+当核心信息（如产品本体、核心受众、目标平台等）缺失时，Agent 会发起不超过 3-5 个核心提问。若得到“你看着办”或“快速出图”的授权，系统将自动启用**假设与推断**能力继续流程，并在输出末尾高亮提示 `Assumptions / Defaults Used`，充分保证流程通畅。
+
+---
+
+## 📦 输出交付规范
+
+系统会为每一次产出规划清晰的任务流目录结构，方便后续人工审核及 A/B 测试：
+
+```text
+generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
+  ├── angle-sheet/  # 🛠️ 临时产品角度基准图（用于一致性控制）
+  ├── main/         # 🖼️ 主图组（1024x1024）
+  ├── detail/       # 📜 详情页长图组（1024x1536）
+  ├── prompts/      # 📝 每张资产图的独立执行 Prompt
+  ├── extras/       # 🎨 接口额外生成的变体或备选图
+  └── custom/       # 🧪 临时调试与自定义生成图
+```
+
+### 📏 图片包黄金法则
+只要提到“详情页 / PDP / 主图堆栈 / 整套商品图”，Skill 默认遵循以下交付模型：
+- **5 张主图**：首图卖点 → 机制解析 → 利益证明 → 场景对比 → 优惠保障。
+- **7-9 张详情图**：首屏承接 → 痛点放大 → 机制解释 → 步骤场景 → 竞品对比 → 好评背书 → 风险逆转 (CTA)。
+- 每张图**独立 Prompt** 生成，拒绝劣质拼图，强制应用全局 Style Lock。
+
+---
+
+## 🎯 三大转化驱动模型 (Conversion Drivers)
+
+| 驱动模式 | 适用场景 | 策略重心 |
+| --- | --- | --- |
+| 👁️ **Visual-Driven** | 外观、质感、礼品感强、前后对比明显的产品 | 极致的视觉主张、质感放大、场景匹配、扫读利益点 |
+| ⚡ **Pain-Driven** | 解决反复烦恼、降低风险、提升效率的产品 | 痛点挖掘 → 机制解析 → 利益证明 → 信任背书 → CTA |
+| 💖 **Emotion-Value** | 表达自我身份、归属感、社交地位或冲动消费品 | 情绪钩子、身份叙事、社交信号放大、低摩擦引导 |
+
+---
+
+## 📋 真实输入输出参考
+
+### 典型输入结构 (Input)
+```text
+Product: Self-heating eye mask
+Category: Sleep & wellness
+Audience: stressed office workers in the US market
+Differentiators: 40-minute heat duration, unscented option...
+Current weak points: decent CTR, low add-to-cart, weak trust perception
+Goal: improve CVR and trust
+Need: 5 hero images + 8 PDP detail images
+```
+
+### 专业交付形态 (Output Shape)
+<details>
+<summary><b>点击查看策略输出缩略版</b></summary>
 
 ```text
 1. Conversion Driver Diagnosis
@@ -240,260 +214,29 @@ Generate mode additionally returns generated file paths.
 2. Buyer Reason Card
    Target Buyer: stressed office workers.
    Purchase Trigger: eye fatigue and sleep friction after long screen time.
-   Core Belief Shift: from "just another eye mask" to "a low-effort decompression ritual".
+   ...
 
 3. English Baseline
    Hero headline: Melt Away Screen-Day Tension
-   Proof line: 40-minute gentle warmth
-   CTA style: soft risk reversal
+   ...
 
 4. Hero Image Sequence
    Frame 1: problem snapshot
-   Frame 2: warmth mechanism
-   Frame 3: relief benefit
-   Frame 4: trust frame
-   Frame 5: offer + guarantee
+   ...
 
 5. Image Prompts
    Prompt 01: Campaign Style Lock... [independent executable prompt]
 ```
+</details>
 
 ---
 
-## Image API Configuration
-
-Direct image generation is optional.
-
-Create a local `.env` file in the project root:
-
-```dotenv
-IMG_BASE_URL=https://api.openai.com/v1
-IMG_MODEL=gpt-image-1.5
-IMG_API_KEY=your-api-key
-```
-
-Compatible aliases are also supported:
-
-- `OPENAI_BASE_URL`
-- `OPENAI_API_BASE`
-- `OPENAI_IMAGE_MODEL`
-- `OPENAI_MODEL`
-- `OPENAI_API_KEY`
-
-Keep real API keys local. Do not commit `.env`.
+## ⚠️ 局限性说明
+- **生图能力边界**：当前支持文本生图与单张产品参考图生图，暂不支持基于 mask 的精准局部重绘。
+- **外部接口依赖**：高度依赖 OpenAI 兼容的 Images API。图像质量、连贯性与耗时取决于您配置的底层模型（如 DALL·E 3 / Flux 等）及服务商。
+- **转化归因**：本 Skill 输出为高转化潜力的策略与创意基线，真实商业回报（CTR/CVR/AOV）仍受限于您的产品力、市场定价与流量采买策略。
 
 ---
-
-## Image Script Usage
-
-Generate from a direct prompt:
-
-```bash
-python3 scripts/generate_image.py \
-  --prompt "premium Amazon main image for a portable blender, clean white background, large product, concise benefit label" \
-  --job-dir generated-images/portable-blender-pack-20260509-120000 \
-  --asset-type main \
-  --size 1024x1024
-```
-
-Generate from a prompt file:
-
-```bash
-python3 scripts/generate_image.py \
-  --prompt-file prompts/detail-01.txt \
-  --job-dir generated-images/portable-blender-pack-20260509-120000 \
-  --asset-type detail \
-  --size 1024x1536
-```
-
-Use a product reference image:
-
-```bash
-python3 scripts/generate_image.py \
-  --prompt-file prompts/angle-sheet.txt \
-  --image product.png \
-  --job-dir generated-images/portable-blender-pack-20260509-120000 \
-  --asset-type angle-sheet \
-  --size 1024x1024
-```
-
-Force prompt-only mode:
-
-```bash
-python3 scripts/generate_image.py \
-  --mode prompt \
-  --prompt "clean product hero image, premium studio lighting, white background" \
-  --job-dir generated-images/product-pack-20260509-010946 \
-  --asset-type main
-```
-
-Force image mode:
-
-```bash
-python3 scripts/generate_image.py \
-  --mode image \
-  --prompt-file prompt.txt \
-  --job-dir generated-images/product-pack-20260509-010946 \
-  --asset-type main \
-  --size 1024x1024 \
-  --quality high \
-  --format png \
-  --n 1
-```
-
-Use a custom `.env` path:
-
-```bash
-python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt
-```
-
-Supported options:
-
-- `--prompt`
-- `--prompt-file`
-- `--mode`
-- `--job-dir`
-- `--asset-type`
-- `--output-dir`
-- `--env-file`
-- `--size`
-- `--quality`
-- `--format`
-- `--n`
-- `--image`
-
----
-
-## Output Directory Convention
-
-Each complete image pack should use one unique job directory:
-
-```text
-generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
-  angle-sheet/  temporary product identity reference images
-  main/         hero / main images
-  detail/       PDP detail-page images
-  prompts/      prompt files for each image
-  extras/       extra returned variants
-  custom/       one-off tests or custom images
-```
-
-Use `--job-dir` to point at the task root and `--asset-type` to route outputs:
-
-- `angle-sheet`
-- `main`
-- `detail`
-- `extras`
-- `custom`
-
----
-
-## Default Image Pack Rules
-
-When the user asks for a PDP, detail page, Amazon A+, Shopify product page, product image stack, or full ecommerce image pack, the default output is:
-
-- **5 hero / main images**
-  - first-image selling proposition
-  - mechanism / function
-  - benefit proof
-  - comparison or lifestyle scene
-  - offer / guarantee
-
-- **7-9 PDP detail images**
-  - opening bridge
-  - pain or desire amplification
-  - mechanism explanation
-  - core benefits
-  - usage steps
-  - scenario coverage
-  - comparison / why choose this
-  - review or recommendation frame
-  - trust / FAQ / risk reversal / CTA
-
-Default sizes:
-
-- main images: `1024x1024`
-- detail images: `1024x1536`
-
-Each image gets its own prompt. Do not cram a whole long landing page into one generated image.
-
----
-
-## Product Reference Flow
-
-For physical products with a reference image, use a temporary **Product Angle Sheet** first.
-
-The angle sheet should capture:
-
-- front view
-- left 45-degree view
-- right 45-degree view
-- side thickness
-- back or key structural view
-- ports, buttons, LEDs, or important details
-- product + packaging combination
-- usage angle, if relevant
-
-The angle sheet is only an identity reference. It should not include prices, badges, ratings, CTAs, discounts, or final marketing copy.
-
-Formal image prompts should reference it only like this:
-
-```text
-Use the product angle sheet only as product identity reference.
-```
-
----
-
-## Default Campaign Style Lock
-
-```text
-Campaign Style Lock: consistent premium cross-border ecommerce visual system across the entire image set; fixed palette of clean off-white background, deep charcoal text, one product-matched accent color, and one soft secondary accent; neutral-cool studio lighting; modern geometric sans-serif headline placeholders only; consistent rounded rectangular info labels; consistent thin-line icon style; clean high-end product photography mixed with minimal infographic elements; stable product scale and placement; generous whitespace; fixed color palette, single font system, stable backgrounds, consistent lighting, matched icon styles.
-```
-
----
-
-## Compliance Behavior
-
-Compliance is ignored by default unless the user explicitly asks for:
-
-- compliance review
-- platform compliance
-- ad compliance
-- category risk review
-- Amazon / TikTok / Meta policy checking
-
-Even when compliance mode is off, factual claims such as certifications, test data, sales volume, official endorsements, and brand authorization must come from user-provided or verifiable sources.
-
-Review / testimonial handling:
-
-- If compliance is on: only use real reviews, real recommendation themes, or user-provided testimonial assets.
-- If compliance is off: simulated review-style copy can be used, but it must be marked as an assumption.
-
----
-
-## Recommended Workflow
-
-1. Give the agent product details, channel, market, and reference images.
-2. Ask for the Buyer Reason Card and English baseline first.
-3. Review the offer, CTA, proof, and trust logic.
-4. Generate the full image sequence and prompts.
-5. Configure `IMG_*` variables if direct generation is needed.
-6. Generate images.
-7. A/B test 2-3 core hooks by CTR, add-to-cart, CVR, and AOV.
-
----
-
-## Limitations
-
-- Supports text-to-image and single reference-image workflows.
-- Local mask / inpainting workflows are not included yet.
-- Requires an OpenAI-compatible Images API for direct generation.
-- Provider support for `size`, `quality`, `format`, and `n` may vary.
-- Output quality, speed, and cost depend on the selected model and provider.
-- The skill provides conversion strategy and production prompts; actual performance still depends on product, offer, traffic source, price, and testing discipline.
-
----
-
-## License
-
-Use it, adapt it, and make better product pages.
+<div align="center">
+  <p><i>Empowering E-commerce AI Agents with High-Converting Visuals</i></p>
+</div>
