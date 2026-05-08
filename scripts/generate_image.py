@@ -32,6 +32,18 @@ ENV_ALIASES = {
     ENV_MODEL: ("OPENAI_IMAGE_MODEL", "IMAGE_MODEL", "OPENAI_MODEL"),
     ENV_API_KEY: ("OPENAI_API_KEY", "API_KEY"),
 }
+REQUIRED_CONFIGS = (ENV_BASE_URL, ENV_MODEL, ENV_API_KEY)
+ASSET_TYPE_DIRS = {
+    "angle": "angle-sheet",
+    "angle-sheet": "angle-sheet",
+    "main": "main",
+    "hero": "main",
+    "detail": "detail",
+    "pdp-detail": "detail",
+    "extra": "extras",
+    "extras": "extras",
+    "custom": "custom",
+}
 REFERENCE_IMAGE_MIME_TYPES = {
     "png": "image/png",
     "jpg": "image/jpeg",
@@ -99,20 +111,32 @@ def load_env_file(env_file: Path | None) -> None:
             os.environ[key] = strip_env_value(value)
 
 
-def require_config(name: str) -> str:
-    candidates = (name, *ENV_ALIASES.get(name, ()))
-    for candidate in candidates:
+def config_candidates(name: str) -> tuple[str, ...]:
+    return (name, *ENV_ALIASES.get(name, ()))
+
+
+def get_config(name: str) -> str | None:
+    for candidate in config_candidates(name):
         value = os.environ.get(candidate, "").strip()
         if value:
             return value
+    return None
 
-    accepted = "、".join(candidates)
-    if not value:
-        fail(
-            f"缺少配置 {name}。请在 .env 中设置 IMG_BASE_URL、IMG_MODEL、IMG_API_KEY；"
-            f"也兼容这些变量名：{accepted}。"
-        )
-    return value
+
+def collect_config() -> tuple[dict[str, str], list[str]]:
+    config: dict[str, str] = {}
+    missing: list[str] = []
+    for name in REQUIRED_CONFIGS:
+        value = get_config(name)
+        if value:
+            config[name] = value
+        else:
+            missing.append(name)
+    return config, missing
+
+
+def format_missing_config(missing: list[str]) -> str:
+    return "；".join(" / ".join(config_candidates(name)) for name in missing)
 
 
 def encode_reference_image(image_path: str) -> str:
@@ -153,6 +177,59 @@ def build_payload(args: argparse.Namespace, prompt: str, model: str) -> dict[str
         # JSON 图片编辑接口使用 images 数组；本地图片转为 data URL 作为参考图。
         payload["images"] = [{"image_url": encode_reference_image(args.image)}]
     return payload
+
+
+def safe_filename_stem(value: str) -> str:
+    chars: list[str] = []
+    for char in value.lower():
+        if char.isascii() and (char.isalnum() or char in {"-", "_"}):
+            chars.append(char)
+        elif char in {" ", ".", "/", "\\"}:
+            chars.append("-")
+    stem = "".join(chars).strip("-_")
+    return stem or "prompt"
+
+
+def prompt_filename(args: argparse.Namespace) -> str:
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    if args.prompt_file:
+        source_stem = safe_filename_stem(Path(args.prompt_file).stem)
+    else:
+        source_stem = "prompt"
+    return f"{ASSET_TYPE_DIRS[args.asset_type]}-{source_stem}-{timestamp}.txt"
+
+
+def save_prompt(prompt: str, args: argparse.Namespace) -> Path | None:
+    if not args.job_dir:
+        return None
+
+    prompt_dir = Path(args.job_dir) / "prompts"
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+    output_path = prompt_dir / prompt_filename(args)
+    try:
+        output_path.write_text(f"{prompt}\n", encoding="utf-8")
+    except OSError as exc:
+        fail(f"无法写入 Prompt 文件：{exc}")
+    return output_path
+
+
+def resolve_output_dir(args: argparse.Namespace) -> Path:
+    if args.job_dir:
+        return Path(args.job_dir) / ASSET_TYPE_DIRS[args.asset_type]
+    return Path(args.output_dir)
+
+
+def print_prompt_only(prompt: str, prompt_path: Path | None, missing: list[str]) -> None:
+    if missing:
+        print("图片 API 配置未完整，已按 auto 模式只输出 Prompt。")
+        print(f"缺少配置：{format_missing_config(missing)}")
+        print("补齐 IMG_BASE_URL、IMG_MODEL、IMG_API_KEY 后，同一命令会默认直接生成图片。")
+    else:
+        print("已按 prompt 模式只输出 Prompt。")
+    if prompt_path:
+        print(f"Prompt 已保存：{prompt_path}")
+    print("Prompt：")
+    print(prompt)
 
 
 def image_endpoint(base_url: str, args: argparse.Namespace) -> str:
@@ -278,9 +355,25 @@ def parse_args() -> argparse.Namespace:
     prompt_group.add_argument("--prompt", help="直接传入图片生成 Prompt。")
     prompt_group.add_argument("--prompt-file", help="从文本文件读取图片生成 Prompt。")
     parser.add_argument(
+        "--mode",
+        choices=("auto", "prompt", "image"),
+        default="auto",
+        help="输出模式：auto 配置完整则生图、配置缺失则输出 Prompt；prompt 只输出 Prompt；image 强制生图。",
+    )
+    parser.add_argument(
+        "--job-dir",
+        help="单次任务根目录，例如 generated-images/product-pack-20260509-010946；传入后按 asset-type 自动归类。",
+    )
+    parser.add_argument(
+        "--asset-type",
+        choices=tuple(ASSET_TYPE_DIRS),
+        default="custom",
+        help="任务资产类型：angle-sheet 临时角度图，main 主图，detail 详情页，extras 额外变体，custom 其他。",
+    )
+    parser.add_argument(
         "--output-dir",
         default="generated-images",
-        help="图片输出目录，默认 generated-images。",
+        help="旧版图片输出目录，默认 generated-images；传入 --job-dir 后由 job-dir/asset-type 接管。",
     )
     parser.add_argument(
         "--env-file",
@@ -315,16 +408,30 @@ def main() -> None:
     env_file = Path(args.env_file) if args.env_file else find_default_env_file()
     load_env_file(env_file)
     prompt = read_prompt(args)
-    base_url = require_config(ENV_BASE_URL).rstrip("/")
-    model = require_config(ENV_MODEL)
-    api_key = require_config(ENV_API_KEY)
+    config, missing = collect_config()
+    if missing and args.mode == "image":
+        fail(
+            "image 模式需要完整图片 API 配置。缺少配置："
+            f"{format_missing_config(missing)}。"
+        )
+
+    prompt_path = save_prompt(prompt, args)
+    if args.mode == "prompt" or missing:
+        print_prompt_only(prompt, prompt_path, missing if args.mode == "auto" else [])
+        return
+
+    base_url = config[ENV_BASE_URL].rstrip("/")
+    model = config[ENV_MODEL]
+    api_key = config[ENV_API_KEY]
 
     payload = build_payload(args, prompt, model)
     endpoint = image_endpoint(base_url, args)
     result = post_json(endpoint, api_key, payload)
-    paths = save_images(result, Path(args.output_dir), args.format)
+    paths = save_images(result, resolve_output_dir(args), args.format)
 
     print("生成完成：")
+    if prompt_path:
+        print(f"Prompt 已保存：{prompt_path}")
     for path in paths:
         print(path)
 

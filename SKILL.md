@@ -421,19 +421,32 @@ IMG_API_KEY=your-api-key
 
 脚本也兼容：`OPENAI_BASE_URL`、`OPENAI_API_BASE`、`OPENAI_IMAGE_MODEL`、`OPENAI_MODEL`、`OPENAI_API_KEY`。
 
+默认 `--mode auto`：
+
+- `IMG_BASE_URL`、`IMG_MODEL`、`IMG_API_KEY` 配置齐全时，脚本直接生成图片。
+- 配置缺失时，脚本只输出 Prompt；传入 `--job-dir` 时，同步保存到 `<job-dir>/prompts/`。
+- 明确只要 Prompt 时使用 `--mode prompt`。
+- 明确强制生图时使用 `--mode image`。
+
 命令示例：
 
 ```bash
-python3 scripts/generate_image.py --prompt "clean product hero image..." --size 1024x1024
-python3 scripts/generate_image.py --prompt-file prompt.txt --output-dir generated-images
-python3 scripts/generate_image.py --prompt-file prompt.txt --image product.png --output-dir generated-images
-python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt
+python3 scripts/generate_image.py --prompt "clean product hero image..." --job-dir generated-images/product-pack-20260509-010946 --asset-type main --size 1024x1024
+python3 scripts/generate_image.py --prompt-file prompts/detail-01.txt --job-dir generated-images/product-pack-20260509-010946 --asset-type detail --size 1024x1536
+python3 scripts/generate_image.py --prompt-file prompts/angle-sheet.txt --image product.png --job-dir generated-images/product-pack-20260509-010946 --asset-type angle-sheet
+python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt --job-dir generated-images/product-pack-20260509-010946 --asset-type main
 ```
 
 规则：
 
 - 短 Prompt 用 `--prompt`，长 Prompt 用 `--prompt-file`。
 - 有产品参考图时用 `--image product.png`；脚本会改用 `/images/edits` 并把本地图片作为参考图传入。
+- 每次完整商品图包创建唯一 `--job-dir`：`generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>`。
+- 临时角度图用 `--asset-type angle-sheet`，保存到 `<job-dir>/angle-sheet/`。
+- 主图用 `--asset-type main`，保存到 `<job-dir>/main/`。
+- 详情页用 `--asset-type detail`，保存到 `<job-dir>/detail/`。
+- 额外返回变体或备选图用 `--asset-type extras`，保存到 `<job-dir>/extras/`。
+- Prompt 自动保存到 `<job-dir>/prompts/`。
 - 主图默认 `1024x1024`；详情页默认 `1024x1536`，如模型仅支持近似尺寸则选最接近尺寸并说明。
 - 缺少 `.env` 或 `IMG_*` 配置时，只输出 Prompt 和配置说明。
 - 真实 API key 只保存在本地环境变量或 `.env`，输出中使用占位值。

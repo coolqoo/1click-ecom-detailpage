@@ -138,7 +138,7 @@ Generate 模式会额外输出生成文件路径。
 
 ## API 配置
 
-这个 Skill 通过你本地配置的 API 工作，密钥由你自己保存。你需要在项目根目录创建 `.env`：
+这个 Skill 通过你本地配置的 API 工作，密钥由你自己保存。项目根目录可创建 `.env`：
 
 ```dotenv
 IMG_BASE_URL=https://api.openai.com/v1
@@ -156,24 +156,44 @@ IMG_API_KEY=your-api-key
 
 真实 API key 只放在本地 `.env` 或运行环境中；README、`SKILL.md`、脚本、Git 提交和聊天记录使用占位值。
 
+默认 `--mode auto`：
+
+- `IMG_BASE_URL`、`IMG_MODEL`、`IMG_API_KEY` 配置齐全时，脚本直接生成图片。
+- 配置缺失时，脚本只输出 Prompt；传入 `--job-dir` 时，同步保存到 `<job-dir>/prompts/`。
+- 明确只要 Prompt 时使用 `--mode prompt`。
+- 明确强制生图时使用 `--mode image`。
+
 ## 生图脚本用法
 
 直接传入 Prompt：
 
 ```bash
-python3 scripts/generate_image.py --prompt "clean product hero image, premium studio lighting, white background" --size 1024x1024
+python3 scripts/generate_image.py \
+  --prompt "clean product hero image, premium studio lighting, white background" \
+  --job-dir generated-images/product-pack-20260509-010946 \
+  --asset-type main \
+  --size 1024x1024
 ```
 
 从文件读取 Prompt：
 
 ```bash
-python3 scripts/generate_image.py --prompt-file prompt.txt --output-dir generated-images
+python3 scripts/generate_image.py \
+  --prompt-file prompts/detail-01.txt \
+  --job-dir generated-images/product-pack-20260509-010946 \
+  --asset-type detail \
+  --size 1024x1536
 ```
 
 使用产品参考图生成更一致的商品图：
 
 ```bash
-python3 scripts/generate_image.py --prompt-file prompt.txt --image product.png --output-dir generated-images
+python3 scripts/generate_image.py \
+  --prompt-file prompts/angle-sheet.txt \
+  --image product.png \
+  --job-dir generated-images/product-pack-20260509-010946 \
+  --asset-type angle-sheet \
+  --size 1024x1024
 ```
 
 更多参数：
@@ -182,7 +202,8 @@ python3 scripts/generate_image.py --prompt-file prompt.txt --image product.png -
 python3 scripts/generate_image.py \
   --prompt-file prompt.txt \
   --image product.png \
-  --output-dir generated-images \
+  --job-dir generated-images/product-pack-20260509-010946 \
+  --asset-type main \
   --size 1024x1024 \
   --quality high \
   --format png \
@@ -199,6 +220,9 @@ python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt
 
 - `--prompt`
 - `--prompt-file`
+- `--mode`
+- `--job-dir`
+- `--asset-type`
 - `--output-dir`
 - `--env-file`
 - `--size`
@@ -208,6 +232,28 @@ python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt
 - `--image`
 
 脚本只使用 Python 标准库，无需安装第三方依赖。
+
+## 输出目录规范
+
+每次完整商品图包使用唯一任务根目录：
+
+```text
+generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
+  angle-sheet/  临时 Product Angle Sheet 图片
+  main/         主图图片
+  detail/       详情页图片
+  prompts/      每张图对应的 Prompt
+  extras/       接口额外返回变体或备选图
+  custom/       单张测试图或临时自定义图
+```
+
+调用脚本时用 `--job-dir` 指向任务根目录，用 `--asset-type` 选择归类：
+
+- `--asset-type angle-sheet`：临时角度基准图。
+- `--asset-type main`：主图。
+- `--asset-type detail`：详情页。
+- `--asset-type extras`：额外变体或备选图。
+- `--asset-type custom`：单张测试图或临时自定义图。
 
 ## 图片包规则
 
