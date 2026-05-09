@@ -50,7 +50,6 @@ REFERENCE_IMAGE_MIME_TYPES = {
     "jpeg": "image/jpeg",
     "webp": "image/webp",
 }
-MAX_DATA_URL_LENGTH = 20_971_520
 
 
 def fail(message: str, exit_code: int = 1) -> None:
@@ -139,28 +138,6 @@ def format_missing_config(missing: list[str]) -> str:
     return "；".join(" / ".join(config_candidates(name)) for name in missing)
 
 
-def encode_reference_image(image_path: str) -> str:
-    path = Path(image_path)
-    if not path.is_file():
-        fail(f"参考图片不存在：{image_path}")
-
-    suffix = path.suffix.lower().lstrip(".")
-    mime = REFERENCE_IMAGE_MIME_TYPES.get(suffix)
-    if not mime:
-        supported = "/".join(REFERENCE_IMAGE_MIME_TYPES)
-        fail(f"不支持的参考图片格式：.{suffix}，仅支持 {supported}。")
-
-    try:
-        image_bytes = path.read_bytes()
-    except OSError as exc:
-        fail(f"无法读取参考图片：{exc}")
-
-    data_url = f"data:{mime};base64,{base64.b64encode(image_bytes).decode('ascii')}"
-    if len(data_url) > MAX_DATA_URL_LENGTH:
-        fail("参考图片编码后超过接口 JSON image_url 长度限制，请压缩图片后重试。")
-    return data_url
-
-
 def build_payload(args: argparse.Namespace, prompt: str, model: str) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "model": model,
@@ -173,10 +150,64 @@ def build_payload(args: argparse.Namespace, prompt: str, model: str) -> dict[str
     if args.format:
         # OpenAI 兼容服务通常使用 output_format 控制返回图片格式。
         payload["output_format"] = args.format
-    if args.image:
-        # JSON 图片编辑接口使用 images 数组；本地图片转为 data URL 作为参考图。
-        payload["images"] = [{"image_url": encode_reference_image(args.image)}]
     return payload
+
+
+def multipart_boundary() -> str:
+    return f"----codex-image-boundary-{int(time.time() * 1000)}"
+
+
+def multipart_field(name: str, value: str, boundary: str) -> bytes:
+    return (
+        f"--{boundary}\r\n"
+        f'Content-Disposition: form-data; name="{name}"\r\n\r\n'
+        f"{value}\r\n"
+    ).encode("utf-8")
+
+
+def multipart_file_field(name: str, path: Path, boundary: str) -> bytes:
+    try:
+        image_bytes = path.read_bytes()
+    except OSError as exc:
+        fail(f"无法读取参考图片：{exc}")
+
+    mime_type = REFERENCE_IMAGE_MIME_TYPES[path.suffix.lower().lstrip(".")]
+
+    header = (
+        f"--{boundary}\r\n"
+        f'Content-Disposition: form-data; name="{name}"; filename="{path.name}"\r\n'
+        f"Content-Type: {mime_type}\r\n\r\n"
+    ).encode("utf-8")
+    return header + image_bytes + b"\r\n"
+
+
+def build_multipart_body(args: argparse.Namespace, prompt: str, model: str) -> tuple[bytes, str]:
+    if not args.image:
+        fail("multipart 请求需要参考图片。")
+
+    image_path = Path(args.image)
+    if not image_path.is_file():
+        fail(f"参考图片不存在：{args.image}")
+
+    suffix = image_path.suffix.lower().lstrip(".")
+    if suffix not in REFERENCE_IMAGE_MIME_TYPES:
+        supported = "/".join(REFERENCE_IMAGE_MIME_TYPES)
+        fail(f"不支持的参考图片格式：.{suffix}，仅支持 {supported}。")
+
+    boundary = multipart_boundary()
+    parts = [
+        multipart_field("model", model, boundary),
+        multipart_field("prompt", prompt, boundary),
+        multipart_field("n", str(args.n), boundary),
+        multipart_field("size", args.size, boundary),
+    ]
+    if args.quality:
+        parts.append(multipart_field("quality", args.quality, boundary))
+    if args.format:
+        parts.append(multipart_field("output_format", args.format, boundary))
+    parts.append(multipart_file_field("image", image_path, boundary))
+    parts.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return b"".join(parts), boundary
 
 
 def safe_filename_stem(value: str) -> str:
@@ -246,6 +277,45 @@ def post_json(url: str, api_key: str, payload: dict[str, Any]) -> dict[str, Any]
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            raw = response.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        fail(f"图片接口返回 HTTP {exc.code}：{detail}")
+    except urllib.error.URLError as exc:
+        fail(f"无法连接图片接口：{exc.reason}")
+    except http.client.RemoteDisconnected:
+        fail("图片接口远端断开连接，请稍后重试。")
+    except TimeoutError:
+        fail("图片接口请求超时。")
+
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        fail(f"图片接口返回的不是有效 JSON：{raw[:500]}")
+
+    if not isinstance(parsed, dict):
+        fail("图片接口返回格式不正确：顶层结果不是对象。")
+    return parsed
+
+
+def post_multipart(
+    url: str,
+    api_key: str,
+    body: bytes,
+    boundary: str,
+) -> dict[str, Any]:
+    request = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": f"multipart/form-data; boundary={boundary}",
         },
         method="POST",
     )
@@ -424,9 +494,13 @@ def main() -> None:
     model = config[ENV_MODEL]
     api_key = config[ENV_API_KEY]
 
-    payload = build_payload(args, prompt, model)
     endpoint = image_endpoint(base_url, args)
-    result = post_json(endpoint, api_key, payload)
+    if args.image:
+        body, boundary = build_multipart_body(args, prompt, model)
+        result = post_multipart(endpoint, api_key, body, boundary)
+    else:
+        payload = build_payload(args, prompt, model)
+        result = post_json(endpoint, api_key, payload)
     paths = save_images(result, resolve_output_dir(args), args.format)
 
     print("生成完成：")

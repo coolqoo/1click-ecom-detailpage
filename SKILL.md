@@ -100,29 +100,25 @@ description: Build high-converting cross-border ecommerce PDP, hero image, produ
 
 只要使用了 `Inferred`、`Assumption` 或 `Default`，最终输出必须包含 **Assumptions / Defaults Used**，用短列表告知用户。只有在用户明确要求确认后再继续，或硬性约束会明显改变结果时，才暂停等待确认。
 
-### Compliance Preference
+### Global Compliance Rule
 
-最小输入阶段要询问合规偏好：
+最小输入阶段需询问用户的合规偏好：`Default: Compliance ignored by default; Compliance Path runs only when user explicitly opts in.`
 
-- 默认值：`Default: Compliance ignored by default; Compliance Path runs only when user explicitly opts in.`
-- 如果用户明确说“考虑合规 / 平台合规 / 广告合规 / 类目合规 / 风险审查”，才进入 **Compliance Path**。
-- 如果用户未选择合规，正常走转化和生图路线，省略独立合规模块。
-- 默认忽略合规时，数据、认证、销量和品牌授权仍需来自用户提供或可验证来源；用户好评 / 推荐按 Review Compliance Switch 处理。
+如果用户明确说“考虑合规 / 平台合规 / 广告合规 / 类目合规 / 风险审查”，才进入 **Compliance Path**（先询问禁用表达，并检查用词）。否则省略独立合规模块。
 
-Compliance Path 只在用户明确启用时执行：
+**当合规启用时（Compliance enabled）**：
+- 严格审查事实与主张。对比图（Before/After 或 Comparison）只能使用用户提供或可公开查证的事实；涉及竞品、成分、数据、认证、医疗、安全、销量等时必须有来源。
+- 证据不足时，改为温和表达、品类级概括或 proof placeholder。
+- 详情页用户好评图（Customer Review / Testimonial）只能使用真实好评或推荐；没有真实评价素材时，必须使用 review placeholder，不能自行编造。
+- 第三方平台截图、真实用户名和认证标识只能在有真实素材时使用。
 
-1. 询问目标平台、国家/地区、类目和禁用表达。
-2. 检查图片文案中的功效、医疗、认证、比较、折扣、评价、授权和绝对化表达。
-3. 输出可用表达、需证据表达、建议弱化表达。
-4. 再进入 English baseline、图片序列和 Prompt。
-
-### Review Compliance Switch
-
-用户好评 / 推荐素材按合规开关处理：
-
-- **Compliance enabled**：只能使用真实用户好评、真实推荐、真实评论主题或用户提供的 testimonial。没有真实素材时，取消 Review / recommendation 这张图，把该屏替换为利益、使用步骤、FAQ、保障或场景图。
-- **Compliance disabled / ignored**：如果没有真实好评或推荐素材，可以编写模拟好评、推荐理由、review-style quote 或 social proof 文案用于转化；在 **Assumptions / Defaults Used** 中说明该内容为生成的营销文案。
-- 第三方平台截图、真实用户名、认证标识和可核验评价数量只在用户提供真实素材时使用。
+**当合规关闭或被忽略时（Compliance disabled / ignored，默认状态）**：
+- 直接放宽限制，以提高 CVR 为最高优先级。
+- 对比图允许使用更强的营销型推断对比，包括夸张的 before/after 状态、模拟痛点、推断差异。可以写 `Typical wipes may include...`、`Ordinary option`、`Simpler formula` 等转化表达。
+- 详情页好评图可以自由编写模拟好评、推荐理由、review-style quote 或 social proof 文案。
+- 允许直接为转化目的生成合理的模拟数据或虚拟背书。
+- **底线**：即使放宽，也不得凭空伪造具体的、易被直接证伪的硬事实（如虚构具名竞品的化学成分、捏造带有平台特征的真实截图等）。放宽的是说服策略和营销包装，而不是纯粹的恶意造假。
+- 任何为了转化生成的模拟对比、模拟好评或生成数据，只需在最后的 **Assumptions / Defaults Used** 中做基础声明即可。
 
 ### Assumptions / Defaults Disclosure
 
@@ -330,16 +326,16 @@ Campaign Style Lock: consistent premium cross-border ecommerce visual system acr
 5. Usage steps: 3-4 simple steps.
 6. Scenario coverage: where, when, who, before / after state.
 7. Comparison choice: ordinary option vs this product, based on observable differences.
-8. Review / recommendation stack: user praise, review themes, recommendation reasons, testimonial snippets, social proof layout.
+8. Mandatory review frame: every PDP detail pack must include at least one dedicated user review, testimonial, or social proof image.
 9. Trust stack: materials, packaging, warranty, proof placeholder.
 10. FAQ / risk reversal / CTA: concerns, fit, bundle, guarantee, close.
 
 详情页生成规则：
 
-- 详情页必须优先使用用户好评和推荐素材强化信任与购买理由。
-- 合规启用时：只使用真实好评、真实推荐或真实评论主题；没有真实素材时，用利益、使用步骤、FAQ、保障或场景图替换 Review / recommendation 图。
-- 合规忽略 / 关闭时：没有真实素材也可以编写模拟好评、推荐理由或 review-style quote，并在 Assumptions / Defaults Used 中说明。
-- 第三方平台截图、真实用户名、认证标识和可核验评价数量只在用户提供真实素材时使用。
+- 详情页必须包含 1 张独立对比图，不能只在其他图里轻描淡写。图名 / Frame objective 应明确写 `Comparison` 或 `Before / After`。
+- 详情页必须包含 1 张独立用户好评图（Customer Review / Testimonial）。不能省略该图。
+- 对比图优先选择最能推动购买的证据差异：成分、材质、结构、使用前后、清洁效果、时间成本、风险降低、价格 / 组合价值、普通方案 vs 本产品。母婴、敏感肌、护肤、健康、食品、清洁类产品优先做成分 / 配方 / 安全感对比。
+- 关于对比图和好评图的素材限制、营销夸张尺度以及免责声明，统一遵循上文的 **Global Compliance Rule** 执行。
 
 ---
 
@@ -463,7 +459,8 @@ python3 scripts/generate_image.py --env-file .env --prompt-file prompt.txt --job
 - Mobile readability: 图内文字是否短、清楚、层级强。
 - Visual consistency: 多图是否复用同一 Style Lock。
 - Platform fit: 是否适配 Amazon / Shopify / TikTok Shop 等渠道语境。
-- Evidence honesty: 是否避免虚构数据、认证、评分和品牌授权；用户好评 / 推荐是否按 Review Compliance Switch 处理。
+- Mandatory frames: PDP 详情页是否包含至少 1 张独立 before/after 或 comparison 图，以及 1 张独立用户好评图；如果没有，必须补图。
+- Evidence honesty: 是否正确执行了 Global Compliance Rule（合规开启时严格限制，合规关闭时放宽并做基础声明）。
 
 正式 Compliance Review 只在用户主动要求合规检查时输出；明显会虚构或误导时，做最小提醒并改写。
 

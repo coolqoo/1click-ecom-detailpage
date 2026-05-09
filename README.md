@@ -2,28 +2,42 @@
 
 # 🛍️ 1Click Ecom PDP Skill
 
-**面向 AI Agent 的高级跨境电商 PDP 转化策略引擎**
+**帮你一键生成高转化的跨境电商主图与商品详情页（PDP）**
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Tested On](https://img.shields.io/badge/Tested_on-OpenClaw_|_Hermes_|_Codex_|_Claude_Code-2ea44f?style=for-the-badge&logo=openai&logoColor=white)](#)
 [![AI Agent Ready](https://img.shields.io/badge/AI_Agent-Ready-8A2BE2?style=for-the-badge&logo=probot&logoColor=white)](#)
 
-*深度洞察转化诱因 ｜ 端到端生成高转化图包与文案 ｜ 无缝对接主流 API*
-
 </div>
 
 ---
 
-> **Ecom PDP Skill** 的核心理念是：**先判断商品为什么能卖**。
+> **1Click Ecom PDP Skill** 是一个专为 AI Agent 设计的跨境电商图像生成工具。
 > 
-> 它能够智能输出高转化的**英文基准文案**、**主图 / 详情页视觉结构**、**图内短文案**以及**可执行的 AI 生图 Prompt**。在配置 OpenAI 兼容的图片 API 后，更可直接为您生成完整的电商 PDP 图包，实现真正的端到端交付。
+> 你只需要告诉它“卖什么产品”和“受众是谁”，它就会帮你写好英文营销文案、规划好排版结构，并直接调用 AI 生图工具，把**一套可以直接上架的商品图包（主图 + 详情页图）**交给你。
 
 ## ✨ 核心特性
 
-- **🎯 深度转化诊断**：智能分析产品的核心购买驱动力（视觉驱动、痛点驱动或情绪价值驱动）。
-- **🌍 极致跨境本地化**：生成原汁原味的 English (US) 营销文案，完美适配 Amazon, Shopify, TikTok Shop 等多渠道。
-- **📸 端到端出图能力**：根据策略 Prompt 自动生成 5 张主图 + 7~9 张详情页连贯视觉图。
-- **🤖 广泛的框架兼容**：专为 Agent 打造，已在 OpenClaw, Hermes, Codex, Claude Code 等主流智能体框架上进行深度验证与测试。
+- **📸 端到端一键出图**：根据简单描述自动生成 5 张主图 + 7~9 张详情页图片，全自动交付。
+- **🎨 多图视觉一致性**：自动对齐风格与产品主体，确保整套图包视觉统一，拒绝拼凑感。
+- **🎯 转化导向的文案与结构**：自带爆款逻辑，自动生成原汁原味 English (US) 文案，适配 Amazon 等渠道。
+- **🤖 广泛的框架兼容**：专为 Agent 打造，已在 OpenClaw, Hermes, Codex, Claude Code 等主流框架深度验证。
+
+---
+
+## 🖼️ 真实效果展示
+
+**输入你的需求（示例）：**
+> *(请替换此处为你真实的输入截图)*
+![输入示例](https://via.placeholder.com/800x200?text=Your+Input+Screenshot+Here)
+
+**自动生成的主图：**
+> *(请替换此处为你真实的主图输出截图)*
+![主图输出示例](https://via.placeholder.com/800x400?text=Hero+Image+Output+Here)
+
+**自动生成的详情页：**
+> *(请替换此处为你真实的详情页输出截图)*
+![详情页输出示例](https://via.placeholder.com/800x600?text=Detail+Page+Output+Here)
 
 ---
 
@@ -35,7 +49,7 @@
 请安装这个 Skill：`https://github.com/coolqoo/1click-ecom-detailpage`
 ```
 
-安装完成后，配置生图模型 API（参考下方 [🔑 API 配置](#-api-配置)），即可通过自然语言直接驱动。
+安装完成后，配置生图模型 API（参考下方 [🔑 API 配置](#-部署与配置)），即可通过自然语言直接驱动。
 
 *(注意：若未配置 API，系统将仅输出可执行的生图 Prompt。)*
 
@@ -189,47 +203,6 @@ generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
 
 ---
 
-## 📋 真实输入输出参考
-
-### 典型输入结构 (Input)
-```text
-Product: Self-heating eye mask
-Category: Sleep & wellness
-Audience: stressed office workers in the US market
-Differentiators: 40-minute heat duration, unscented option...
-Current weak points: decent CTR, low add-to-cart, weak trust perception
-Goal: improve CVR and trust
-Need: 5 hero images + 8 PDP detail images
-```
-
-### 专业交付形态 (Output Shape)
-<details>
-<summary><b>点击查看策略输出缩略版</b></summary>
-
-```text
-1. Conversion Driver Diagnosis
-   Primary: Pain-Driven
-   Why: recurring discomfort + clear relief mechanism + trust barrier.
-
-2. Buyer Reason Card
-   Target Buyer: stressed office workers.
-   Purchase Trigger: eye fatigue and sleep friction after long screen time.
-   ...
-
-3. English Baseline
-   Hero headline: Melt Away Screen-Day Tension
-   ...
-
-4. Hero Image Sequence
-   Frame 1: problem snapshot
-   ...
-
-5. Image Prompts
-   Prompt 01: Campaign Style Lock... [independent executable prompt]
-```
-</details>
-
----
 
 ## ⚠️ 局限性说明
 - **生图能力边界**：当前支持文本生图与单张产品参考图生图，暂不支持基于 mask 的精准局部重绘。
