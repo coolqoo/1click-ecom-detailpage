@@ -34,6 +34,8 @@
 ![image.png](https://image-b7a.pages.dev/file/1778338861993_image.png)
 
 **自动生成的详情页：**
+
+
 ![image.png](https://image-b7a.pages.dev/file/1778338883692_image.png)
 
 ---
