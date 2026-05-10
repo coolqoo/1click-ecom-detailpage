@@ -208,6 +208,16 @@ generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
 - **转化归因**：本 Skill 输出为高转化潜力的策略与创意基线，真实商业回报（CTR/CVR/AOV）仍受限于您的产品力、市场定价与流量采买策略。
 
 ---
+
+## 🙏 致谢
+感谢 [linux.do](https://linux.do) 社区支持。
+
+---
+
+## 📄 许可证
+本项目基于 MIT License 开源发布。
+
+---
 <div align="center">
   <p><i>Empowering E-commerce AI Agents with High-Converting Visuals</i></p>
 </div>
