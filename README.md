@@ -1,8 +1,10 @@
 <div align="center">
 
+**English** | [简体中文](./README_zh.md)
+
 # 🛍️ 1Click Ecom PDP Skill
 
-**帮你一键生成高转化的跨境电商主图与商品详情页（PDP）**
+**Generate high-converting e-commerce main images and Product Detail Pages (PDP) in one click.**
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Tested On](https://img.shields.io/badge/Tested_on-OpenClaw_|_Hermes_|_Codex_|_Claude_Code-2ea44f?style=for-the-badge&logo=openai&logoColor=white)](#)
@@ -12,85 +14,85 @@
 
 ---
 
-> **1Click Ecom PDP Skill** 是一个专为 AI Agent 设计的跨境电商图像生成工具。
+> **1Click Ecom PDP Skill** is an e-commerce image generation tool designed specifically for AI Agents.
 > 
-> 你只需要告诉它“卖什么产品”和“受众是谁”，它就会帮你写好英文营销文案、规划好排版结构，并直接调用 AI 生图工具，把**一套可以直接上架的商品图包（主图 + 详情页图）**交给你。
+> You simply tell it "what product you're selling" and "who the target audience is", and it will automatically write English marketing copy, plan the layout structure, and call AI image generation tools to deliver **a complete set of ready-to-publish product images (Main Images + Detail Page Images)**.
 
-## ✨ 核心特性
+## ✨ Core Features
 
-- **📸 端到端一键出图**：根据简单描述自动生成 5 张主图 + 7~9 张详情页图片（默认），全自动交付。
-- **🎨 多图视觉一致性**：自动对齐风格与产品主体，确保整套图包视觉统一，拒绝拼凑感。
-- **🎯 转化导向的文案与结构**：自带爆款逻辑，自动生成原汁原味 English (US) 文案，适配 Amazon 等渠道。
-- **🤖 广泛的框架兼容**：专为 Agent 打造，已在 OpenClaw, Hermes, Codex, Claude Code 等主流框架深度验证。
+- **📸 End-to-End One-Click Generation**: Automatically generates 5 main images + 7~9 detail page images (by default) based on simple descriptions, with fully automated delivery.
+- **🎨 Visual Consistency Across Images**: Automatically aligns style and product subject to ensure the whole image set has a unified visual identity, eliminating the "patchwork" feel.
+- **🎯 Conversion-Driven Copy & Structure**: Built-in blockbuster logic, automatically generating authentic English (US) copy tailored for channels like Amazon.
+- **🤖 Broad Framework Compatibility**: Built for Agents, deeply verified on mainstream frameworks like OpenClaw, Hermes, Codex, and Claude Code.
 
 ---
 
-## 🖼️ 真实效果展示
+## 🖼️ Real-World Showcase
 
-**输入你的需求（示例）：**
+**Your Input (Example):**
 ![image.png](https://image-b7a.pages.dev/file/1778338782975_image.png)
 
-**自动生成的主图：**
+**Auto-Generated Main Images:**
 ![image.png](https://image-b7a.pages.dev/file/1778338861993_image.png)
 
-**自动生成的详情页：**
+**Auto-Generated Detail Page:**
 
 ![image.png](https://image-b7a.pages.dev/file/1778338883692_image.png)
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-将以下指令发送给你的 AI Agent：
+Send the following instruction to your AI Agent:
 
 ```text
-请安装这个 Skill：`https://github.com/coolqoo/1click-ecom-detailpage`
+Please install this Skill: `https://github.com/coolqoo/1click-ecom-detailpage`
 ```
 
-安装完成后，配置生图模型 API（参考下方 [🔑 API 配置](#-部署与配置)），即可通过自然语言直接驱动。
+Once installed, configure the image generation model API (see [🔑 API Configuration](#-deployment--configuration) below), and you can drive it directly via natural language.
 
-*(注意：若未配置 API，系统将仅输出可执行的生图 Prompt。)*
+*(Note: If the API is not configured, the system will only output executable Prompts.)*
 
-**直接发给 Agent 的示例指令：**
+**Example Instruction to Agent:**
 ```text
-用 ecom-pdp 给这款产品做 Amazon US PDP 图包：
-输出 5 张主图 + 8 张详情页图。
+Use ecom-pdp to create an Amazon US PDP image pack for this product:
+Output 5 main images + 8 detail page images.
 ```
 
 ---
 
-## 💻 部署与配置
+## 💻 Deployment & Configuration
 
 <details>
-<summary><b>点击展开手动安装指南</b></summary>
+<summary><b>Click to expand manual installation guide</b></summary>
 
-**环境要求：**
-- AI Agent 具有本地 Skill 目录的读取权限。
-- Python 3.10+（生图脚本纯净且仅依赖标准库）。
+**Requirements:**
+- AI Agent with read permissions to the local Skill directory.
+- Python 3.10+ (The generation script is pure and relies only on standard libraries).
 
-如果您的 Agent 运行在 `~/.codex/skills` 目录下，可从本仓库根目录手动安装：
+If your Agent runs in the `~/.codex/skills` directory, you can install it manually from the repository root:
 
 ```bash
 mkdir -p ~/.codex/skills/ecom-pdp
 rsync -a --exclude .git --exclude .env --exclude "generated-images/" ./ ~/.codex/skills/ecom-pdp/
 ```
 
-**验证安装：**
+**Verify Installation:**
 ```bash
 python3 ~/.codex/skills/ecom-pdp/scripts/generate_image.py --help
 ```
 
 </details>
 
-### 🔑 API 配置 (解锁直接生图)
+### 🔑 API Configuration (Unlock Direct Generation)
 
-为了开启图包的**一键生成**，请在项目根目录复制环境变量文件：
+To enable **one-click generation** of the image pack, please copy the environment variables file in the project root:
 
 ```bash
 cp .env.example .env
 ```
 
-并在 `.env` 中填入兼容的服务凭证：
+And fill in the compatible service credentials in `.env`:
 
 ```dotenv
 IMG_BASE_URL=https://api.openai.com/v1
@@ -98,27 +100,27 @@ IMG_MODEL=gpt-image-1.5
 IMG_API_KEY=your-api-key
 ```
 
-> **安全提示**：请妥善保管您的密钥，切勿将 `.env` 提交至代码库中。脚本同时兼容 `OPENAI_API_KEY` 等常见环境变量。
+> **Security Tip**: Please keep your keys safe and never commit `.env` to the repository. The script is also compatible with common environment variables like `OPENAI_API_KEY`.
 
 ---
 
-## 💡 实战场景与用法
+## 💡 Use Cases & Workflow
 
-### 🤖 零代码自然语言调用
-在 AI Agent 中以对话形式发起任务：
+### 🤖 Zero-Code Natural Language Invocation
+Initiate a task conversationally with your AI Agent:
 
 ```text
-用 ecom-pdp 给这款便携榨汁杯做 Amazon US PDP 图包：
-目标人群是健身和通勤人群，卖点是 20 秒打碎、USB-C 充电、便携防漏。
-输出 5 张主图 + 8 张详情页图，先给 Prompt；如果本地 API 配置齐全就直接出图。
+Use ecom-pdp to generate an Amazon US PDP image pack for this portable blender:
+Target audience is fitness and commuting crowds, key selling points are 20-second blending, USB-C charging, portable and leak-proof.
+Output 5 main images + 8 detail page images, provide Prompts first; if local API configuration is ready, generate images directly.
 ```
 
-### 🛠️ 进阶命令行调用
+### 🛠️ Advanced Command Line Invocation
 
 <details>
-<summary><b>点击查看更多高级用法</b></summary>
+<summary><b>Click to view more advanced usages</b></summary>
 
-**仅输出 Prompt 策略文件：**
+**Output Prompt Strategy File Only:**
 ```bash
 python3 scripts/generate_image.py \
   --mode prompt \
@@ -128,7 +130,7 @@ python3 scripts/generate_image.py \
   --size 1024x1024
 ```
 
-**从预设文件自动生成：**
+**Generate Automatically from Preset File:**
 ```bash
 python3 scripts/generate_image.py \
   --prompt-file prompts/main-01.txt \
@@ -136,7 +138,7 @@ python3 scripts/generate_image.py \
   --asset-type main
 ```
 
-**基于产品参考图生成一致性资产（Product Angle Sheet）：**
+**Generate Consistency Assets (Product Angle Sheet) Based on Reference Image:**
 ```bash
 python3 scripts/generate_image.py \
   --prompt-file prompts/angle-sheet.txt \
@@ -149,73 +151,84 @@ python3 scripts/generate_image.py \
 
 ---
 
-## ⚙️ 核心引擎与工作流
+### 🌱 From Product Images to Ad Campaign Cold Start
 
-### 🔄 智能执行链路
-1. **多级上下文补齐**：自动按权重补全信息缺失（用户输入 > 附件上下文 > 自动联网研究 > 逻辑推理 > 默认假设）。
-2. **转化驱动洞察**：智能剖析当前商品属于 Visual-Driven, Pain-Driven 还是 Emotion-Value-Driven。
-3. **策略卡输出**：生成 `Buyer Reason Card`（购买理由卡），定调英文基准文案与核心 CTA。
-4. **视觉风格锁定**：建立全局 `Campaign Style Lock`，确保几十张套图风格严丝合缝。
-5. **按需直接交付**：用户明确指令且 API 就绪时，直接调用内部脚本渲染出完整资产图包。
+For many cross-border e-commerce initial tests, the bottleneck isn't "having a product," but rather whether the creatives, pages, and ad costs can be quickly validated. This Skill handles the first half: using natural language to extract product selling points and create main/detail image packs, allowing you to quickly build landing materials for Amazon, standalone sites, or TikTok Shop.
 
-### 🛡️ 智能合规偏好 (Compliance Engine)
-系统默认**关闭**合规审查以保证创意自由度。若您要求“开启合规 / 风险审查”：
-- 将严格过滤功效承诺、医疗暗示、绝对化用语及不当比较。
-- 强制要求数据、认证、销量及用户真实评价来源合法且可验证。
-- 没有真实素材时，自动以功能解析 / FAQ / 场景代替评价区块。
+If your next step is running TikTok ads, you might want to check out [ttoh.app](https://ttoh.app). It is an independent TikTok ad offer hub that organizes available ad credits, coupons, and landing page entrances across different countries and regions, such as new account ad credits, Messaging Ads discounts, and TikTok Business Landing Pages for various languages/regions.
 
-### 🧠 主动提问与容错机制
-当核心信息（如产品本体、核心受众、目标平台等）缺失时，Agent 会发起不超过 3-5 个核心提问。若得到“你看着办”或“快速出图”的授权，系统将自动启用**假设与推断**能力继续流程，并在输出末尾高亮提示 `Assumptions / Defaults Used`，充分保证流程通畅。
+In short, this Skill helps you solve "how to create product pages and ad creatives"; [ttoh.app](https://ttoh.app) acts more like an offer index before your cold start, helping you quickly check if there are suitable TikTok ad credits or campaign entrances for your target market. For sellers just starting to test products who want to manage their initial budget carefully, this step can save a lot of searching.
+
+It is not a required dependency for this project; if you only need to generate PDP image packs, this Skill is sufficient. But if you plan to use TikTok traffic to test the product, check [ttoh.app](https://ttoh.app) first for available offers.
 
 ---
 
-## 📦 输出交付规范
+## ⚙️ Core Engine & Workflow
 
-系统会为每一次产出规划清晰的任务流目录结构，方便后续人工审核及 A/B 测试：
+### 🔄 Intelligent Execution Pipeline
+1. **Multi-Level Context Completion**: Automatically fills in missing information by weight (User Input > Attachment Context > Web Research > Logical Inference > Default Assumptions).
+2. **Conversion-Driven Insights**: Intelligently analyzes whether the product is Visual-Driven, Pain-Driven, or Emotion-Value-Driven.
+3. **Strategy Card Output**: Generates a `Buyer Reason Card` to set the tone for baseline English copy and core CTAs.
+4. **Visual Style Lock**: Establishes a global `Campaign Style Lock` to ensure tight consistency across dozens of images.
+5. **On-Demand Direct Delivery**: When user instructions are clear and APIs are ready, directly calls internal scripts to render the complete asset pack.
+
+### 🛡️ Smart Compliance Engine
+By default, compliance review is **disabled** to maximize creative freedom. If you request "enable compliance/risk review":
+- It strictly filters efficacy promises, medical implications, absolute terms, and improper comparisons.
+- Forces data, certifications, sales volumes, and user reviews to have legal, verifiable sources.
+- When authentic materials are lacking, it replaces review sections with feature breakdowns / FAQs / scenarios.
+
+### 🧠 Proactive Inquiry & Fault Tolerance
+When core information (like product itself, core audience, target platform) is missing, the Agent will initiate up to 3-5 core questions. If given authorization like "you decide" or "generate quickly," the system automatically engages **assumptions and inference** to continue the flow, highlighting `Assumptions / Defaults Used` at the end to guarantee a smooth process.
+
+---
+
+## 📦 Output Delivery Specifications
+
+The system structures a clear task directory for each output, facilitating subsequent manual review and A/B testing:
 
 ```text
 generated-images/<product-slug>-pack-<yyyymmdd-hhmmss>/
-  ├── angle-sheet/  # 🛠️ 临时产品角度基准图（用于一致性控制）
-  ├── main/         # 🖼️ 主图组（1024x1024）
-  ├── detail/       # 📜 详情页长图组（1024x1536）
-  ├── prompts/      # 📝 每张资产图的独立执行 Prompt
-  ├── extras/       # 🎨 接口额外生成的变体或备选图
-  └── custom/       # 🧪 临时调试与自定义生成图
+  ├── angle-sheet/  # 🛠️ Temporary product angle baseline images (for consistency control)
+  ├── main/         # 🖼️ Main image group (1024x1024)
+  ├── detail/       # 📜 Detail page long image group (1024x1536)
+  ├── prompts/      # 📝 Independent execution Prompts for each asset image
+  ├── extras/       # 🎨 Extra variants or fallback images generated by the API
+  └── custom/       # 🧪 Temporary debug and custom generated images
 ```
 
-### 📏 图片包黄金法则
-只要提到“详情页 / PDP / 主图堆栈 / 整套商品图”，Skill 默认遵循以下交付模型：
-- **5 张主图**：首图卖点 → 机制解析 → 利益证明 → 场景对比 → 优惠保障。
-- **7-9 张详情图**：首屏承接 → 痛点放大 → 机制解释 → 步骤场景 → 竞品对比 → 好评背书 → 风险逆转 (CTA)。
-- 每张图**独立 Prompt** 生成，拒绝劣质拼图，强制应用全局 Style Lock。
+### 📏 Golden Rules for Image Packs
+Whenever "detail page / PDP / main image stack / full set of product images" is mentioned, the Skill defaults to the following delivery model:
+- **5 Main Images**: Hero Image (Selling Point) → Mechanism Parsing → Benefit Proof → Scenario Comparison → Offer Guarantee.
+- **7-9 Detail Images**: Hero Screen Follow-up → Pain Point Amplification → Mechanism Explanation → Step-by-Step Scenario → Competitor Comparison → Testimonial Endorsement → Risk Reversal (CTA).
+- **Independent Prompts** per image, rejecting poor collages, forcing the application of the global Style Lock.
 
 ---
 
-## 🎯 三大转化驱动模型 (Conversion Drivers)
+## 🎯 Three Major Conversion Drivers
 
-| 驱动模式 | 适用场景 | 策略重心 |
+| Driver Mode | Applicable Scenarios | Strategy Focus |
 | --- | --- | --- |
-| 👁️ **Visual-Driven** | 外观、质感、礼品感强、前后对比明显的产品 | 极致的视觉主张、质感放大、场景匹配、扫读利益点 |
-| ⚡ **Pain-Driven** | 解决反复烦恼、降低风险、提升效率的产品 | 痛点挖掘 → 机制解析 → 利益证明 → 信任背书 → CTA |
-| 💖 **Emotion-Value** | 表达自我身份、归属感、社交地位或冲动消费品 | 情绪钩子、身份叙事、社交信号放大、低摩擦引导 |
+| 👁️ **Visual-Driven** | Products with strong appearance, texture, gift appeal, and obvious before/after contrast | Extreme visual claims, texture amplification, scenario matching, scannable benefits |
+| ⚡ **Pain-Driven** | Products that solve recurring annoyances, reduce risks, or improve efficiency | Pain point excavation → Mechanism parsing → Benefit proof → Trust endorsement → CTA |
+| 💖 **Emotion-Value** | Self-expression, sense of belonging, social status, or impulse buys | Emotional hooks, identity narrative, social signal amplification, low-friction guidance |
 
 ---
 
-
-## ⚠️ 局限性说明
-- **生图能力边界**：当前支持文本生图与单张产品参考图生图，暂不支持基于 mask 的精准局部重绘。
-- **外部接口依赖**：高度依赖 OpenAI 兼容的 Images API。图像质量、连贯性与耗时取决于您配置的底层模型（如 DALL·E 3 / Flux 等）及服务商。
-- **转化归因**：本 Skill 输出为高转化潜力的策略与创意基线，真实商业回报（CTR/CVR/AOV）仍受限于您的产品力、市场定价与流量采买策略。
-
----
-
-## 🙏 致谢
-感谢 [linux.do](https://linux.do) 社区支持。
+## ⚠️ Limitations
+- **Image Generation Boundaries**: Currently supports text-to-image and single product reference image generation; precise local inpainting based on masks is not yet supported.
+- **External API Dependency**: Highly dependent on OpenAI-compatible Images APIs. Image quality, coherence, and processing time depend on your configured underlying model (like DALL·E 3 / Flux) and service provider.
+- **Conversion Attribution**: This Skill outputs strategy and creative baselines with high conversion potential. Real commercial returns (CTR/CVR/AOV) are still limited by your product strength, market pricing, and traffic acquisition strategies.
 
 ---
 
-## 📄 许可证
-本项目基于 MIT License 开源发布。
+## 🙏 Acknowledgments
+Thanks to the [linux.do](https://linux.do) community for the support.
+
+---
+
+## 📄 License
+This project is open-sourced under the MIT License.
 
 ---
 <div align="center">
